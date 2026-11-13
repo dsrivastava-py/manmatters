@@ -57,11 +57,26 @@ Live link: https://dsrivastava-py.github.io/manmatters/
 
 No customer data is in the app or in this repo: no customer names, numbers or quotes. The app stores only the user's own start date, language, theme and check results in localStorage on their device.
 
+### Submission documents
+
+Each document is kept as Markdown (easy to read on GitHub) and as Word (to upload). The Word files are generated from the Markdown with `python3 scripts/build-docs.py` (needs `pip install python-docx`).
+
+| Document | Markdown | Word |
+| --- | --- | --- |
+| Part 1: Customer conversations, patterns, problem statement, 44-point secondary research | [part-1-customer-research.md](docs/part-1-customer-research.md) | [Part-1-Customer-Conversations-Man-Matters.docx](docs/Part-1-Customer-Conversations-Man-Matters.docx) |
+| Part 2: What I built, how it solves the problem, key decisions, AI tools | [part-2-solution.md](docs/part-2-solution.md) | [Part-2-Solution-Kab-Tak.docx](docs/Part-2-Solution-Kab-Tak.docx) |
+| Demo video script (about 3 minutes) | [demo-video-script.md](docs/demo-video-script.md) | [Demo-Video-Script-Kab-Tak.docx](docs/Demo-Video-Script-Kab-Tak.docx) |
+
+**Consent:** names and phone numbers are shared only for the five customers who gave permission, and only in the Part 1 document, never in the app or in this repository. The secondary research uses public posts, cited by link only, with no usernames or contact details, since consent from those people was not needed or sought.
+
+**Research method:** secondary research first (44 public posts and reviews from Reddit, App Store, Google Play, Quash, ConsumerComplaints.in and YouTube, 2024 to 2026) to prepare the questions, then five real customer conversations to test it. The problem statement is based on the conversations; the secondary research is labelled as context.
+
+**Top public themes (out of 44):** cannot tell if it is working 22.7%, competitor comparison 22.7%, trust doubts 20.5%, clear positive results 20.5%, price and refunds 18.2%, consult quality 18.2%, early shed panic 9.1%. Doubt clusters at weeks 2 to 4 (early shed) and months 4 to 7 (plateau or relapse).
+
 ### Still to add (placeholders, not filled in)
 
-- **Part 1 document link:** `TODO: add link`
-- **Customer conversation summary:** `TODO: add summary (no names or phone numbers)`
-- **Demo video link:** `TODO: add link`
+- **Customer details and patterns:** fill in the five customers and the patterns table in the Part 1 document, marked `[Fill in]` and highlighted yellow in Word.
+- **Demo video link:** `[Fill in]` in the Part 2 document.
 
 ## What and why
 
