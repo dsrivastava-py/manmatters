@@ -107,6 +107,89 @@ export interface Content {
     consent: string;
     privacy: string;
   };
+  ui: Ui;
+}
+
+export interface Ui {
+  nav: { week: string; shed: string; checkpoint: string; slipped: string; apply: string; label: string };
+  header: { settings: string; conceptPill: string; langLabel: string; skip: string };
+  onboarding: {
+    title: string;
+    lead: string;
+    dateLabel: string;
+    chips: { today: string; weekAgo: string; monthAgo: string; threeMonthsAgo: string };
+    chipsLabel: string;
+    notStarted: string;
+    start: string;
+    errors: { invalid: string; future: string; tooOld: string; empty: string };
+  };
+  week: {
+    label: string;
+    phaseLabel: string;
+    timelineLabel: string;
+    spikeShed: string;
+    spikeDoubt: string;
+    checkpointMark: string;
+    nextCheckpoint: string;
+    checkpointToday: string;
+    commonlyTitle: string;
+    doNowTitle: string;
+    doNow: string[];
+    watchTitle: string;
+    watch: string[];
+    shedCta: string;
+    beyondTimeline: string;
+    maintenanceHonest: string;
+  };
+  wizard: {
+    step: string;
+    next: string;
+    back: string;
+    seeResult: string;
+    startOver: string;
+    saved: string;
+    weekHint: string;
+    yourAnswer: string;
+  };
+  checkpoint: {
+    intro: string;
+    start: string;
+    earlyNote: string;
+    submit: string;
+    needAll: string;
+    historyTitle: string;
+    noHistory: string;
+    retake: string;
+    weekLabel: string;
+    questionsTitle: string;
+  };
+  slipped: {
+    intro: string;
+    daysLabel: string;
+    chips: string[];
+    unit: string;
+    check: string;
+    restartTitle: string;
+    restart: string[];
+    invalid: string;
+    again: string;
+  };
+  apply: { progress: string; first: string };
+  settings: {
+    title: string;
+    language: string;
+    startDate: string;
+    changeDate: string;
+    save: string;
+    close: string;
+    about: string;
+    aboutBody: string;
+    reviewTitle: string;
+    confirm: string;
+    cancel: string;
+    cleared: string;
+  };
+  footer: { line: string };
 }
 
 /** Set to false only after a qualified clinician has reviewed all clinical text. */
