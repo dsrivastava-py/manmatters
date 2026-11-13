@@ -9,6 +9,9 @@ export const CONSULT_URL = 'https://manmatters.com/pages/hair-form-assessment';
 
 // NOTE: manmatters.com has no dedicated consent page. The terms and conditions
 // page is the closest public document, so it is used as the consent link.
+// India's single emergency number.
+export const EMERGENCY_NUMBER = '112';
+
 export const CONSENT_URL = 'https://manmatters.com/terms-and-conditions';
 
 export const PRIVACY_URL = 'https://manmatters.com/privacy-policy';
@@ -17,4 +20,10 @@ export const SITE_URL = 'https://manmatters.com';
 export const STORAGE_KEY = 'kabtak.v1';
 export const STORAGE_VERSION = 1;
 
+// Official Man Matters wordmark, unmodified copy of
+// https://i.mscwlns.co/media/misc/others/Manmatters%20Logo_egs4fo.png (800x217).
+// Always size by height with width auto to keep its proportions.
 export const LOGO = 'brand/logo.png';
+
+// Official typeface MiSansLatin is self-hosted in public/fonts/MiSansLatin (see tokens.css).
+export const BRAND_FONT = 'MiSansLatin';

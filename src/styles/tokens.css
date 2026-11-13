@@ -1,7 +1,26 @@
-@import '@fontsource/inter/latin-400.css';
-@import '@fontsource/inter/latin-500.css';
-@import '@fontsource/inter/latin-600.css';
-@import '@fontsource/inter/latin-700.css';
+/* Official Man Matters typeface, self-hosted. Same @font-face mapping as manmatters.com:
+   Medium covers 300-400, Semibold 500-550, Bold 600-700. */
+@font-face {
+  font-family: 'MiSansLatin';
+  src: url('/fonts/MiSansLatin/MiSansLatin-Medium.woff2') format('woff2');
+  font-weight: 300 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'MiSansLatin';
+  src: url('/fonts/MiSansLatin/MiSansLatin-Semibold.woff2') format('woff2');
+  font-weight: 500 550;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'MiSansLatin';
+  src: url('/fonts/MiSansLatin/MiSansLatin-Bold.woff2') format('woff2');
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* Brand colours (inferred from manmatters.com CSS frequency, not an official style guide) */
@@ -34,7 +53,7 @@
   --color-danger-text: #7a1212; /* above 9:1 on danger bg */
   --color-border: var(--n-100);
 
-  --font-sans: 'MiSansLatin', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'MiSansLatin', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --tap: 44px;
   --radius: 14px;
