@@ -43,3 +43,25 @@ describe('storage', () => {
     expect(loadData()).toEqual(defaultData());
   });
 });
+
+describe('legacy checkpoint results', () => {
+  it('re-scores old "responding" and "unclear" results from the saved answers', () => {
+    const answers = { lessShedding: 'yes', fillIn: 'no', thicker: 'no', consistentUse: 'yes', photoBetter: 'no', newThinning: 'no' };
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        ...defaultData(),
+        checkpoints: [
+          { week: 12, date: '2025-01-01', result: 'unclear', answers },
+          { week: 24, date: '2025-04-01', result: 'responding', answers: { ...answers, fillIn: 'yes', thicker: 'yes' } },
+          { week: 24, date: '2025-04-02', result: 'not-responding', answers },
+        ],
+      }),
+    );
+    expect(loadData().checkpoints.map((c) => c.result)).toEqual(['early-signs', 'on-track', 'not-responding']);
+  });
+  it('still rejects unknown result strings', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...defaultData(), checkpoints: [{ week: 12, date: '2025-01-01', result: 'maybe', answers: {} }] }));
+    expect(loadData()).toEqual(defaultData());
+  });
+});

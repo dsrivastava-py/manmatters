@@ -14,3 +14,11 @@ describe('lapseCheck', () => {
     expect(lapseCheck({ daysSkipped, weeksSinceStart })).toBe(expected);
   });
 });
+
+import { lapseShiftWeeks } from '../engine/lapse';
+
+describe('lapseShiftWeeks', () => {
+  it.each([[0, 0], [3, 0], [4, 1], [7, 1], [8, 2], [20, 3], [40, 6]])('%i days moves the timeline %i weeks', (d, w) => {
+    expect(lapseShiftWeeks(d)).toBe(w);
+  });
+});
