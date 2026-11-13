@@ -57,7 +57,7 @@ export function YourWeek({ go }: { go: (r: string) => void }) {
           </button>
         ) : nextCp ? (
           <p className="notice">
-            {fill(w.nextCheckpoint, { n: nextCp === 12 ? 1 : 2, weeks: nextCp - week })}
+            {fill(nextCp - week === 1 ? w.nextCheckpointOne : w.nextCheckpoint, { n: nextCp === 12 ? 1 : 2, weeks: nextCp - week })}
           </p>
         ) : (
           <p className="notice">{w.beyondTimeline}</p>

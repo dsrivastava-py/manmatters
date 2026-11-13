@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { isCheckpointWeek, scoreCheckpoint } from '../engine/checkpoint';
+import { checkpointForWeek, isCheckpointWeek, scoreCheckpoint } from '../engine/checkpoint';
 import type { Answer, CheckpointAnswers, CheckpointOutcome, CheckpointQuestionId } from '../engine/checkpoint';
 import { ConsultCta } from '../components/Cta';
 import { todayISO, useApp } from '../state/AppState';
@@ -25,13 +25,16 @@ export function Checkpoint() {
       return;
     }
     const full = answers as CheckpointAnswers;
-    const o = scoreCheckpoint(full);
+    const o = scoreCheckpoint(full, week);
     setOutcome(o);
     setPhase('result');
-    const cpWeek: 12 | 24 = (week ?? 12) >= 18 ? 24 : 12;
-    patch({
-      checkpoints: [...data.checkpoints, { week: cpWeek, date: todayISO(), result: o.result, answers: full }],
-    });
+    const cpWeek = checkpointForWeek(week);
+    // Early peeks (before week 12) are never stored, so history and the doctor summary stay accurate.
+    if (cpWeek !== null) {
+      patch({
+        checkpoints: [...data.checkpoints, { week: cpWeek, date: todayISO(), result: o.result, answers: full }],
+      });
+    }
   };
 
   const history = (
@@ -60,6 +63,7 @@ export function Checkpoint() {
         <section className={`card result result-${outcome.result}`} aria-live="polite" role="status" data-testid={`result-${outcome.result}`}>
           <h1>{res.title}</h1>
           <p>{res.body}</p>
+          {checkpointForWeek(week) === null && <p className="muted">{u.notSaved}</p>}
           {outcome.lowAdherence && <p>{c.lowAdherence}</p>}
           {outcome.consult && <ConsultCta label={c.consultCta} />}
           <h2>{c.doctorSummaryTitle}</h2>

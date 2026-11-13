@@ -35,17 +35,34 @@ export function isCheckpointWeek(week: number): boolean {
   return (CHECKPOINT_WEEKS as readonly number[]).includes(week);
 }
 
-export function scoreCheckpoint(a: CheckpointAnswers): CheckpointOutcome {
+/** Earliest week at which a check counts as a real checkpoint. */
+export const FIRST_CHECKPOINT_WEEK = CHECKPOINT_WEEKS[0];
+
+/** The checkpoint a check at this week belongs to, or null for an early peek. */
+export function checkpointForWeek(week: number | null): 12 | 24 | null {
+  if (week === null || week < FIRST_CHECKPOINT_WEEK) return null;
+  return week >= CHECKPOINT_WEEKS[1] ? 24 : 12;
+}
+
+export function scoreCheckpoint(a: CheckpointAnswers, week?: number | null): CheckpointOutcome {
   let score = 0;
-  for (const q of POSITIVE) if (a[q] === 'yes') score += 1;
+  let unsure = 0;
+  for (const q of POSITIVE) {
+    if (a[q] === 'yes') score += 1;
+    else if (a[q] === 'unsure') unsure += 1;
+  }
   if (a.newThinning === 'yes') score -= 1;
   const lowAdherence = a.consistentUse === 'no';
 
   let result: CheckpointResult;
   if (score >= RESPONDING_MIN_SCORE && a.newThinning !== 'yes') result = 'responding';
-  else if (score <= NOT_RESPONDING_MAX_SCORE) result = 'not-responding';
+  // "Not sure" is neutral: with half or more of the signs unsure we cannot call it negative.
+  else if (score <= NOT_RESPONDING_MAX_SCORE && unsure < 2) result = 'not-responding';
   else result = 'unclear';
 
-  const consult = result === 'not-responding' || (result === 'unclear' && lowAdherence);
-  return { result, lowAdherence, consult, fixRoutineFirst: lowAdherence && result !== 'responding', score };
+  // Before week 12 nothing is expected yet, so an early peek never says "not responding" or prompts a consult.
+  if (week !== undefined && week !== null && week < FIRST_CHECKPOINT_WEEK && result === 'not-responding') result = 'unclear';
+  const early = week !== undefined && week !== null && week < FIRST_CHECKPOINT_WEEK;
+  const consult = !early && (result === 'not-responding' || (result === 'unclear' && lowAdherence));
+  return { result, lowAdherence, consult, fixRoutineFirst: !early && lowAdherence && result !== 'responding', score };
 }

@@ -61,6 +61,9 @@ export interface Content {
     dizziness: string;
     chest: string;
     severeIrritation: string;
+    emergencyTitle: string;
+    emergencyBody: string;
+    emergencyCall: string;
   };
   checkpoint: {
     title: string;
@@ -104,6 +107,7 @@ export interface Content {
   };
   links: {
     consult: string;
+    consultNotUrgent: string;
     consent: string;
     privacy: string;
   };
@@ -131,6 +135,7 @@ export interface Ui {
     spikeDoubt: string;
     checkpointMark: string;
     nextCheckpoint: string;
+    nextCheckpointOne: string;
     checkpointToday: string;
     commonlyTitle: string;
     doNowTitle: string;
@@ -155,6 +160,7 @@ export interface Ui {
     intro: string;
     start: string;
     earlyNote: string;
+    notSaved: string;
     submit: string;
     needAll: string;
     historyTitle: string;

@@ -24,7 +24,7 @@ function readRoute(): Route {
 }
 
 function Shell() {
-  const { t, lang, setLang, data } = useApp();
+  const { t, lang, setLang, data, week } = useApp();
   const [route, setRoute] = useState<Route>(readRoute);
   const [sheet, setSheet] = useState<null | 'settings' | 'about'>(null);
 
@@ -40,7 +40,8 @@ function Shell() {
     window.scrollTo?.(0, 0);
   }, []);
 
-  const started = !!data.startDate;
+  // A stored date that is no longer valid (future or too old) falls back to onboarding.
+  const started = !!data.startDate && week !== null;
 
   return (
     <div className={`app ${started ? 'with-nav' : ''}`}>

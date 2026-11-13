@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NO_FLAGS, hasRedFlag, shedCheck } from '../engine/shedCheck';
 import type { Irritation, RedFlags, ShedAmount, ShedOutcome } from '../engine/shedCheck';
 import { ConsultCta } from '../components/Cta';
+import { EMERGENCY_NUMBER } from '../config';
 import { fill, todayISO, useApp } from '../state/AppState';
 
 const AMOUNTS: ShedAmount[] = ['a-bit-more', 'clearly-more', 'clumps-or-patches'];
@@ -39,6 +40,7 @@ export function ShedCheck() {
   if (outcome) {
     const res = s.outcomes[outcome];
     const urgent = outcome === 'doctor-now';
+    const emergency = urgent && (flags.chest || flags.swelling);
     return (
       <div className="stack">
         <section
@@ -59,8 +61,17 @@ export function ShedCheck() {
               </ul>
             </div>
           )}
+          {emergency && (
+            <div className="redflag-box" role="alert">
+              <h2>{t.redFlags.emergencyTitle}</h2>
+              <p>{t.redFlags.emergencyBody}</p>
+              <a className="btn btn-danger" href={`tel:${EMERGENCY_NUMBER}`} data-testid="emergency-call">
+                {t.redFlags.emergencyCall}
+              </a>
+            </div>
+          )}
           {(urgent || outcome === 'see-doctor-soon' || outcome === 'unusual-for-week') && (
-            <ConsultCta label={t.links.consult} urgent={urgent} />
+            <ConsultCta label={emergency ? t.links.consultNotUrgent : t.links.consult} urgent={urgent && !emergency} />
           )}
           <p className="muted">{wz.saved}</p>
         </section>

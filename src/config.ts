@@ -9,6 +9,9 @@ export const CONSULT_URL = 'https://manmatters.com/pages/hair-form-assessment';
 
 // NOTE: manmatters.com has no dedicated consent page. The terms and conditions
 // page is the closest public document, so it is used as the consent link.
+// India's single emergency number.
+export const EMERGENCY_NUMBER = '112';
+
 export const CONSENT_URL = 'https://manmatters.com/terms-and-conditions';
 
 export const PRIVACY_URL = 'https://manmatters.com/privacy-policy';

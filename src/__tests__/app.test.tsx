@@ -59,6 +59,33 @@ describe('shed check', () => {
   });
 });
 
+describe('emergency path', () => {
+  const run = (flag: 'chest' | 'swelling' | 'dizziness') => {
+    start(21);
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: en.ui.week.shedCta }));
+    fireEvent.click(screen.getByRole('button', { name: en.ui.wizard.next }));
+    fireEvent.click(screen.getByLabelText(en.shedCheck.amountOptions['a-bit-more']));
+    fireEvent.click(screen.getByRole('button', { name: en.ui.wizard.next }));
+    fireEvent.click(screen.getByLabelText(en.shedCheck.flags[flag]));
+    fireEvent.click(screen.getByRole('button', { name: en.ui.wizard.seeResult }));
+    return screen.getByTestId('result-doctor-now');
+  };
+
+  it.each(['chest', 'swelling'] as const)('%s flag leads with a tel:112 link and a non-urgent consult link', (flag) => {
+    const result = run(flag);
+    expect(within(result).getByTestId('emergency-call')).toHaveAttribute('href', 'tel:112');
+    expect(result).toHaveTextContent(/stop using the product and consult a doctor/i);
+    expect(within(result).getByTestId('consult-cta')).toHaveTextContent(en.links.consultNotUrgent);
+  });
+
+  it('dizziness keeps the consult link and has no emergency call', () => {
+    const result = run('dizziness');
+    expect(within(result).queryByTestId('emergency-call')).toBeNull();
+    expect(within(result).getByTestId('consult-cta')).toHaveTextContent(en.links.consult);
+  });
+});
+
 describe('language toggle', () => {
   it('switches visible text and persists', () => {
     start(7);
@@ -91,6 +118,84 @@ describe('checkpoint', () => {
     expect(result).toHaveTextContent(en.checkpoint.results['not-responding'].title);
     expect(within(result).getByTestId('consult-cta')).toHaveAttribute('href', CONSULT_URL);
     expect(loadData().checkpoints).toHaveLength(1);
+  });
+});
+
+describe('checkpoint edge cases', () => {
+  const answerAll = (val: 'yes' | 'no' | 'unsure') => {
+    fireEvent.click(screen.getByRole('button', { name: en.ui.checkpoint.start }));
+    const form = document.querySelector('form')!;
+    const idx = { yes: 0, no: 1, unsure: 2 }[val];
+    for (const q of Object.keys(en.checkpoint.questions)) {
+      fireEvent.click(form.querySelectorAll<HTMLInputElement>(`input[name="${q}"]`)[idx]);
+    }
+    fireEvent.click(screen.getByRole('button', { name: en.ui.checkpoint.submit }));
+  };
+
+  it('early peek is not saved and cannot say not-responding', () => {
+    start(14);
+    window.location.hash = '/checkpoint';
+    render(<App />);
+    answerAll('no');
+    expect(screen.queryByTestId('result-not-responding')).toBeNull();
+    expect(screen.getByTestId('result-unclear')).toHaveTextContent(en.ui.checkpoint.notSaved);
+    expect(screen.queryByTestId('consult-cta')).toBeNull();
+    expect(loadData().checkpoints).toHaveLength(0);
+  });
+
+  it('all "Not sure" at week 12 is unclear and is saved as week 12', () => {
+    start(7 * 11);
+    window.location.hash = '/checkpoint';
+    render(<App />);
+    answerAll('unsure');
+    expect(screen.getByTestId('result-unclear')).toBeInTheDocument();
+    expect(loadData().checkpoints.map((c) => c.week)).toEqual([12]);
+  });
+});
+
+describe('week label', () => {
+  it('uses the singular for 1 week to go', () => {
+    start(7 * 10 + 1);
+    render(<App />);
+    expect(screen.getByText('Checkpoint 1 is in 1 week')).toBeInTheDocument();
+  });
+
+  it('uses the singular in Hinglish too', () => {
+    updateData({ language: 'hinglish' });
+    start(7 * 10 + 1);
+    render(<App />);
+    expect(screen.getByText('Checkpoint 1 1 hafte mein hai')).toBeInTheDocument();
+  });
+});
+
+describe('invalid stored start date', () => {
+  it('falls back to onboarding instead of a blank screen', () => {
+    updateData({ startDate: '2999-01-01', onboardingSeen: true });
+    render(<App />);
+    expect(screen.getByRole('heading', { name: en.ui.onboarding.title })).toBeInTheDocument();
+    expect(screen.queryByRole('navigation')).toBeNull();
+  });
+});
+
+describe('sheet focus', () => {
+  it('traps Tab, and returns focus to the opener on close', () => {
+    start(14);
+    render(<App />);
+    const opener = screen.getByRole('button', { name: en.ui.header.settings });
+    opener.focus();
+    fireEvent.click(opener);
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveFocus();
+    const items = dialog.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled])');
+    const last = items[items.length - 1];
+    last.focus();
+    fireEvent.keyDown(document, { key: 'Tab' });
+    expect(document.activeElement).toBe(items[0]);
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(last);
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(opener).toHaveFocus();
   });
 });
 

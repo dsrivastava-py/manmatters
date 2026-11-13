@@ -101,6 +101,9 @@ export const hinglish: Content = {
     dizziness: `Chakkar aana ya behoshi jaisa lagna. ${STOP}`,
     chest: `Seene mein dard, jakdan ya tez dhadkan. ${STOP}`,
     severeIrritation: `Scalp par bahut zyada irritation, jalan, chhale ya rash. ${STOP}`,
+    emergencyTitle: 'Ye emergency ho sakti hai',
+    emergencyBody: 'Abhi apna local emergency number milayein (India mein 112) ya nazdiki hospital jayein. Online consult ka intezaar na karein.',
+    emergencyCall: 'Abhi 112 milayein',
   },
   checkpoint: {
     title: 'Honest checkpoint',
@@ -184,6 +187,7 @@ export const hinglish: Content = {
   },
   links: {
     consult: 'Hair test dein aur doctor se milein',
+    consultNotUrgent: 'Urgent nahi: baad mein Man Matters doctor se baat karein',
     consent: 'Terms aur conditions',
     privacy: 'Privacy policy',
   },
@@ -213,6 +217,7 @@ export const hinglish: Content = {
       spikeDoubt: 'Kya ye kaam kar raha hai? ka shak',
       checkpointMark: 'Checkpoint',
       nextCheckpoint: 'Checkpoint {n} {weeks} hafte mein hai',
+      nextCheckpointOne: 'Checkpoint {n} 1 hafte mein hai',
       checkpointToday: 'Ye checkpoint ka hafta hai. Apni honest self-check ka time.',
       commonlyTitle: 'Is stage par aam taur par ye bataya jata hai',
       doNowTitle: 'Abhi kya karein',
@@ -245,6 +250,7 @@ export const hinglish: Content = {
       intro: 'Week 12 aur 24 aapke honest pal hain. Kuch chhote sawal, sheeshe mein ek fair nazar, aur seedha jawab.',
       start: 'Checkpoint shuru karein',
       earlyNote: 'Abhi aap week 12 ya 24 par nahi hain. Aap early jhalak le sakte hain, par ye sirf andaza hai.',
+      notSaved: 'Ye early jhalak aapki checkpoint history ya doctor summary mein save nahi hoti. Chalte rahein aur week 12 par dobara dekhein.',
       submit: 'Mera jawab dikhao',
       needAll: 'Aage badhne ke liye har sawal ka jawab dein.',
       historyTitle: 'Aapke pichhle checkpoints',

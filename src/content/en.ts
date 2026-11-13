@@ -101,6 +101,9 @@ export const en: Content = {
     dizziness: `Dizziness or feeling faint. ${STOP}`,
     chest: `Chest pain, tightness or a racing heartbeat. ${STOP}`,
     severeIrritation: `Severe scalp irritation, burning, blisters or rash. ${STOP}`,
+    emergencyTitle: 'This may be an emergency',
+    emergencyBody: 'Call your local emergency number now (112 in India) or go to the nearest hospital. Do not wait for an online consult.',
+    emergencyCall: 'Call 112 now',
   },
   checkpoint: {
     title: 'Honest checkpoint',
@@ -184,6 +187,7 @@ export const en: Content = {
   },
   links: {
     consult: 'Take the hair test and consult a doctor',
+    consultNotUrgent: 'Not urgent: talk to a Man Matters doctor afterwards',
     consent: 'Terms and conditions',
     privacy: 'Privacy policy',
   },
@@ -213,6 +217,7 @@ export const en: Content = {
       spikeDoubt: 'Is it working? doubt',
       checkpointMark: 'Checkpoint',
       nextCheckpoint: 'Checkpoint {n} is in {weeks} weeks',
+      nextCheckpointOne: 'Checkpoint {n} is in 1 week',
       checkpointToday: 'It is checkpoint week. Time for your honest self-check.',
       commonlyTitle: 'Commonly reported at this stage',
       doNowTitle: 'What to do now',
@@ -245,6 +250,7 @@ export const en: Content = {
       intro: 'Weeks 12 and 24 are your honest moments. A few quick questions, a fair look in the mirror, and a straight answer.',
       start: 'Start the checkpoint',
       earlyNote: 'You are not at week 12 or 24 yet. You can still take an early peek, but it is only a rough guide.',
+      notSaved: 'This early peek is not saved to your checkpoint history or doctor summary. Keep going and check again at week 12.',
       submit: 'Get my answer',
       needAll: 'Answer every question to continue.',
       historyTitle: 'Your past checkpoints',

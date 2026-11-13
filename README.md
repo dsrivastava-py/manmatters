@@ -84,6 +84,7 @@ Everything stays on the device in localStorage (start date, language, checkpoint
 - Is use of the logo, name and brand colours allowed for this concept, and is MiSans licensed for self-hosting?
 - Which clinician owns sign-off of the clinical content, and should timelines differ by product or concern (hair fall, thinning, receding, dandruff-related shedding)?
 - Should checkpoint results be shareable with a doctor inside the consult flow instead of a printed summary?
+- Is the checkpoint rule right? "Not responding" needs at most 1 positive sign of 4 and fewer than 2 "Not sure" answers, and is never shown before week 12. A clinician should confirm these thresholds.
 - Preferred Hinglish tone and wording review.
 
 Note: check the real Man Matters app's existing habit and photo tracker first, to avoid duplicating features. This concept deliberately does not track photos.
