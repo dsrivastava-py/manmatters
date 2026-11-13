@@ -232,7 +232,7 @@ describe('Kab tak? lines', () => {
     render(<App />);
     fireEvent.click(screen.getByRole('button', { name: `10 ${en.ui.slipped.unit}` }));
     const result = screen.getByTestId('result-lapse-reset-expectations');
-    expect(within(result).getByTestId('kabtak')).toHaveTextContent(/roughly 2 weeks\. Expect Settling around/);
+    expect(within(result).getByTestId('kabtak')).toHaveTextContent(/roughly 2 weeks\. Expect Shed settling around/);
     expect(result).toHaveTextContent(en.lapse.actions['lapse-reset-expectations']);
   });
 });

@@ -29,7 +29,7 @@ export const hinglish: Content = {
   },
   phases: {
     'settling-in': {
-      title: 'Shuruaat ke hafte',
+      title: 'Shedding ka samay',
       body: 'Week 1 se 4. Kuch log aam taur par bataate hain ki shuru mein baal zyada jhadte hain. Dar lagna normal hai, aur ye aksar process ka hissa hota hai. Routine jaari rakhein aur dekhte rahein.',
     },
     'shed-settling': {
@@ -327,7 +327,7 @@ export const hinglish: Content = {
       steps: {
         start: 'Shuruaat',
         'shed-window': 'Shedding ka samay',
-        settling: 'Thamne ka samay',
+        settling: 'Shedding thamne ka samay',
         'early-signs': 'Shuruaati sanket',
         'checkpoint-1': 'Checkpoint 1',
         'visible-change': 'Dikhne wala badlav',

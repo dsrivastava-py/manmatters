@@ -51,7 +51,8 @@
   --chip-fg: var(--blue);
   --focus: var(--blue);
   --input-bg: var(--white);
-  --bar-bg: rgba(255, 255, 255, 0.92);
+  --bar-bg: rgba(255, 255, 255, 0.985);
+  --hero-glow: 0.18;
   --shadow: 0 1px 2px rgba(20, 52, 97, 0.06), 0 4px 16px rgba(20, 52, 97, 0.06);
   --shadow-lift: 0 2px 4px rgba(20, 52, 97, 0.1), 0 10px 24px rgba(20, 52, 97, 0.12);
 
@@ -92,7 +93,8 @@
   --chip-fg: #bcd5f6;
   --focus: var(--yellow);
   --input-bg: #0e2140;
-  --bar-bg: rgba(11, 27, 51, 0.92);
+  --bar-bg: rgba(11, 27, 51, 0.985);
+  --hero-glow: 0.08;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
   --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 10px 24px rgba(0, 0, 0, 0.35);
 

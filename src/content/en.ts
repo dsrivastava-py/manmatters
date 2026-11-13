@@ -29,7 +29,7 @@ export const en: Content = {
   },
   phases: {
     'settling-in': {
-      title: 'Settling in',
+      title: 'Shed window',
       body: 'Weeks 1 to 4. Some people commonly report extra shedding as hair cycles reset. It can feel scary, and it is often part of the process. Keep going and keep a note of how it looks.',
     },
     'shed-settling': {
@@ -327,7 +327,7 @@ export const en: Content = {
       steps: {
         start: 'Start',
         'shed-window': 'Shed window',
-        settling: 'Settling',
+        settling: 'Shed settling',
         'early-signs': 'Early signs',
         'checkpoint-1': 'Checkpoint 1',
         'visible-change': 'Visible change',

@@ -193,7 +193,7 @@ input[type='date']:hover, input[type='number']:hover { border-color: var(--prima
 .hero { position: relative; overflow: hidden; }
 .hero::after {
   content: ''; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%;
-  background: var(--accent); opacity: 0.18; pointer-events: none;
+  background: var(--accent); opacity: var(--hero-glow); pointer-events: none;
 }
 .hero-week { font-size: var(--fs-hero); font-weight: 700; margin: 0; line-height: 1.05; }
 .phase-name { font-size: var(--fs-lg); font-weight: 600; color: var(--link); margin-bottom: var(--s-3); }
