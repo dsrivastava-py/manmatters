@@ -28,7 +28,7 @@ Hair routines take months to show results, and the hardest moments are the early
 
 ## Deploy
 
-`dist/` is fully static. The Vite base is `./` and routing is hash based (`#/week`), so no rewrites are needed.
+`dist/` is fully static. The Vite base is `./` (works at the root and under GitHub Pages at `/manmatters/`) and routing is hash based (`#/week`), so no rewrites are needed.
 
 - **GitHub Pages**: `.github/workflows/deploy.yml` builds and publishes on push to `main` (enable Pages with source "GitHub Actions").
 - **Netlify**: `netlify.toml` (build `npm run build`, publish `dist`). `public/_redirects` is included as a harmless fallback.
@@ -88,3 +88,38 @@ Everything stays on the device in localStorage (start date, language, checkpoint
 - Preferred Hinglish tone and wording review.
 
 Note: check the real Man Matters app's existing habit and photo tracker first, to avoid duplicating features. This concept deliberately does not track photos.
+
+## Positioning & research
+
+**Positioning:** Kab Tak? is a complementary *Interpretation Layer*. The Man Matters app tracks compliance (did you apply today?). Kab Tak? interprets outcomes (is what I am seeing normal for week N?). It needs no login or install, works instantly (for example at 11 PM when shedding panic hits) and is usable before and after purchase. It is an independent concept, not an official Man Matters product, and the app copy says it works alongside the Man Matters app and consult flow without claiming affiliation.
+
+**Out of scope on purpose:** photo upload or analysis, habit tracking, reminders. Those are the territory of the existing app.
+
+### Research findings
+
+The research below came from a secondary AI tool. **Verify every link and claim yourself before submission.**
+
+| Finding | Status |
+| --- | --- |
+| Man Matters app has a daily habit tracker with reminders and reward points | Reported by research (Verified Doctors, r/ThirtiesIndia AMA); verify |
+| Progress tracker; co-founder says it "flags whether you're actually responding" | Reported by research; verify the exact quote and source |
+| Doctor photo upload in the consult flow | Reported by research; verify |
+| Blog timelines (Minoxidil Before and After advises monthly same-light, same-angle photos) | Reported by research; verify |
+| Week-3 outreach (YouTube) | Reported by research; verify |
+| A self-serve week-by-week "what is normal now" interpreter inside the app | **UNVERIFIED** (not confirmed to exist or not exist) |
+| Men panic about shedding in weeks 2 to 4 and about reversal in months 5 to 6 (r/malehairadvice, r/IndianSkincareAddicts) | Anecdotal threads; verify |
+| About 35 to 40 percent of users are low or non-responders (Gemini estimate) | **UNVERIFIED. Must NOT appear as a claim in app copy.** The app only says honestly that it may not be working for everyone. |
+
+### Wedge
+
+1. On-demand "is this normal for my week?" answer, self-serve, no callback wait.
+2. Lapse vs plateau explainer (why a skipped stretch can show up as delayed shedding weeks later).
+3. Honest week 12 and 24 checkpoints with a "not responding, talk to a doctor" exit (`NOT_RESPONDING_MAX_SCORE` in `src/engine/checkpoint.ts`: one or fewer positive signs).
+
+### Overlap risk
+
+The co-founder's progress-tracker claim ("flags whether you're actually responding") overlaps with the checkpoint. Difference: Kab Tak? works without an account or logged data, answers a symptom question for a given week on demand, explains the biology of what you see, and sends clear red-flag and not-responding cases to the Man Matters doctor consult. It does not log adherence, upload photos or send reminders. If the in-app tracker already provides a self-serve interpreter, the pitch should be reframed as a lightweight, pre-purchase and anonymous entry point.
+
+### Emergency handling
+
+The 112 link appears only for chest symptoms and swelling. Dizziness and severe irritation say to stop and consult a doctor without the emergency call.

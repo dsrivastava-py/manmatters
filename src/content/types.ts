@@ -190,6 +190,7 @@ export interface Ui {
     close: string;
     about: string;
     aboutBody: string;
+    alongside: string;
     reviewTitle: string;
     confirm: string;
     cancel: string;

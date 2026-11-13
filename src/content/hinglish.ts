@@ -285,6 +285,8 @@ export const hinglish: Content = {
       about: 'Is concept ke baare mein',
       aboutBody:
         'Kab Tak? ek independent concept hai jo dikhata hai ki hair journey ka saathi kaisa ho sakta hai. Ye official Man Matters product nahi hai aur medical salah bhi nahi hai. Man Matters ka naam aur logo unke maalikon ke hain.',
+      alongside:
+        'Kab Tak? ko Man Matters app aur uske doctor consult ke saath istemaal karne ke liye socha gaya hai. Routine ke liye app, aur aapke week par kya expect karein, uske liye ye. Independent concept hai, official taur par juda nahi.',
       reviewTitle: 'Medical review',
       confirm: 'Haan, sab hata do',
       cancel: 'Mera data rehne do',

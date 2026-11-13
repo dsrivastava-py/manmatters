@@ -18,6 +18,7 @@ export function Settings({ onClose, aboutOnly }: { onClose: () => void; aboutOnl
       <section>
         <h3>{s.about}</h3>
         <p>{s.aboutBody}</p>
+        <p>{s.alongside}</p>
         <p>{t.app.conceptDisclaimer}</p>
         <p className="muted">{t.app.medicalDisclaimer}</p>
         <h3>{s.reviewTitle}</h3>

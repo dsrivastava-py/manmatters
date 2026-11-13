@@ -285,6 +285,8 @@ export const en: Content = {
       about: 'About this concept',
       aboutBody:
         'Kab Tak? is an independent concept made to show how a hair journey companion could feel. It is not an official Man Matters product and it is not medical advice. The Man Matters name and logo belong to their owners.',
+      alongside:
+        'Kab Tak? is meant to sit alongside the Man Matters app and its doctor consult. Use the app for your routine, and this for what to expect at your week. Independent concept, not affiliated.',
       reviewTitle: 'Medical review',
       confirm: 'Yes, clear everything',
       cancel: 'Keep my data',

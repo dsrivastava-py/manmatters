@@ -121,6 +121,7 @@ function Shell() {
             <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">{t.links.privacy}</a>
           </p>
           <p className="muted">{t.ui.footer.line}</p>
+          <p className="muted">{t.ui.settings.alongside}</p>
         </footer>
       </main>
 
