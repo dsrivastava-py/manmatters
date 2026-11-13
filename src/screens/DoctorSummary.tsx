@@ -1,3 +1,4 @@
+import { LOGO } from '../config';
 import { useApp } from '../state/AppState';
 
 const QUESTIONS = ['lessShedding', 'fillIn', 'thicker', 'consistentUse', 'photoBetter', 'newThinning'] as const;
@@ -12,6 +13,10 @@ export function DoctorSummary({ go }: { go: (r: string) => void }) {
   return (
     <div className="stack">
       <article className="card doctor-sheet" aria-labelledby="doc-title">
+        <div className="print-brand">
+          <img src={LOGO} alt="Man Matters" className="print-logo" />
+          <span>{t.ui.header.conceptPill}</span>
+        </div>
         <h1 id="doc-title">{d.title}</h1>
         <dl className="facts">
           <div><dt>{d.startDate}</dt><dd>{data.startDate}</dd></div>

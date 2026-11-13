@@ -175,7 +175,12 @@ input[type='date'], input[type='number'] {
 .nav-ico { display: inline-flex; }
 .nav-ico svg { display: block; }
 
+/* Official logo keeps its 800:217 proportions: set height only, width stays auto. */
+.print-brand { display: none; }
+
 @media print {
+  .print-brand { display: flex; align-items: center; gap: 12pt; margin-bottom: 10pt; padding: 6pt 0; font-size: 9pt; }
+  .print-logo { height: 30pt; width: auto; }
   @page { size: A4; margin: 14mm; }
   body { background: #fff; color: #000; font-size: 11pt; }
   .no-print, .topbar, .nav, .footer, .skip, .sheet-backdrop { display: none !important; }

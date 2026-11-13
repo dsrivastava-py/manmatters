@@ -19,7 +19,29 @@ export const CARD_SIZE = { width: 1080, height: 1350 };
 const NAVY = '#143461';
 const YELLOW = '#FDDC69';
 const SURFACE = '#F2F7FC';
-const FONT = 'Inter, system-ui, sans-serif';
+export const CARD_FONT = "'MiSansLatin', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+const FONT = CARD_FONT;
+
+// Weights the card draws with. Loaded before drawing so the canvas never falls back mid-render.
+const CARD_FONT_FACES = ['500 32px MiSansLatin', '600 32px MiSansLatin', '700 32px MiSansLatin'];
+
+export async function loadCardFonts(): Promise<void> {
+  if (typeof document === 'undefined' || !document.fonts?.load) return;
+  try {
+    await Promise.all(CARD_FONT_FACES.map((f) => document.fonts.load(f)));
+  } catch {
+    // Falls back to the next family in the stack.
+  }
+}
+
+export function loadLogo(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('logo-failed'));
+    img.src = src;
+  });
+}
 
 function wrap(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
   const words = text.split(/\s+/);
@@ -38,7 +60,7 @@ function wrap(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): st
   return lines;
 }
 
-export function drawShareCard(canvas: HTMLCanvasElement, m: ShareCardModel): void {
+export function drawShareCard(canvas: HTMLCanvasElement, m: ShareCardModel, logo?: CanvasImageSource & { naturalWidth: number; naturalHeight: number }): void {
   const { width: W, height: H } = CARD_SIZE;
   canvas.width = W;
   canvas.height = H;
@@ -53,6 +75,23 @@ export function drawShareCard(canvas: HTMLCanvasElement, m: ShareCardModel): voi
   ctx.fillRect(0, 0, W, 360);
   ctx.fillStyle = YELLOW;
   ctx.fillRect(0, 360, W, 14);
+
+  // Official logo on a white plate: its blue is not legible on navy. Original proportions,
+  // never recoloured, with clear space of at least a letter height on every side.
+  if (logo && logo.naturalWidth > 0) {
+    const lw = 252;
+    const lh = lw * (logo.naturalHeight / logo.naturalWidth);
+    const clear = 28;
+    const pw = lw + clear * 2;
+    const ph = lh + clear * 2;
+    const px = W - pad - pw;
+    const py = 56;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.roundRect(px, py, pw, ph, 18);
+    ctx.fill();
+    ctx.drawImage(logo, px + clear, py + clear, lw, lh);
+  }
 
   ctx.textBaseline = 'top';
   ctx.fillStyle = YELLOW;

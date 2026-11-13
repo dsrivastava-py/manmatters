@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CONSULT_URL } from '../config';
+import { CONSULT_URL, LOGO } from '../config';
 import { getPhase } from '../engine/phases';
-import { canvasToBlob, drawShareCard, shareOrDownload } from '../lib/shareCard';
+import { canvasToBlob, drawShareCard, loadCardFonts, loadLogo, shareOrDownload } from '../lib/shareCard';
 import type { ShareCardModel } from '../lib/shareCard';
 import { useApp } from '../state/AppState';
 
@@ -36,12 +36,20 @@ export function ShareCard({ go }: { go: (r: string) => void }) {
   useEffect(() => {
     const c = canvasRef.current;
     if (!c || !model) return;
-    try {
-      drawShareCard(c, model);
-      setCanDraw(true);
-    } catch {
-      setCanDraw(false);
-    }
+    let cancelled = false;
+    (async () => {
+      const [logo] = await Promise.all([loadLogo(LOGO).catch(() => undefined), loadCardFonts()]);
+      if (cancelled) return;
+      try {
+        drawShareCard(c, model, logo);
+        setCanDraw(true);
+      } catch {
+        setCanDraw(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [model]);
 
   const run = async () => {
