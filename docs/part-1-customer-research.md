@@ -26,7 +26,7 @@ I used two sources and kept them separate throughout this document.
 
 | Source | What it is | How it is used |
 | --- | --- | --- |
-| **Primary:** 5 customer conversations | Phone or video calls with real Man Matters hair-loss customers, with consent | The basis for the problem statement |
+| **Primary:** 5 customer conversations | One-to-one conversations with real Man Matters hair-loss customers, with consent | The basis for the problem statement |
 | **Secondary:** 44 public data points | Reddit, App Store, Google Play, Quash, ConsumerComplaints.in, YouTube (2024 to 2026) | Context, and a check on whether my five calls are typical |
 
 **Order of work.** I read public discussions first to prepare good questions. They suggested a hypothesis, but I treated it only as something to test. I set a rule before the calls: if the customers' main pain was something else (for example price or delivery), I would report that honestly and build for it instead.
