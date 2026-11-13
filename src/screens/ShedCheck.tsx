@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { NO_FLAGS, hasRedFlag, shedCheck } from '../engine/shedCheck';
+import { NO_FLAGS, hasRedFlag, shedCheck, shedNext } from '../engine/shedCheck';
+import { addDaysISO, phaseRange } from '../engine/phases';
+import { daysUntil, formatDate, whenPhrase } from '../lib/when';
 import type { Irritation, RedFlags, ShedAmount, ShedOutcome } from '../engine/shedCheck';
 import { ConsultCta } from '../components/Cta';
 import { EMERGENCY_NUMBER } from '../config';
@@ -41,14 +43,26 @@ export function ShedCheck() {
     const res = s.outcomes[outcome];
     const urgent = outcome === 'doctor-now';
     const emergency = urgent && (flags.chest || flags.swelling);
+    const settle = phaseRange('shed-settling');
+    const nx = shedNext(outcome, weekNum, { from: settle.from, to: settle.to ?? settle.from });
+    const kabTak = (() => {
+      const k = s.kabTak;
+      if (nx.kind === 'now') return k.now;
+      if (nx.kind === 'consult') return k.consult;
+      const iso = addDaysISO(todayISO(), nx.recheckDays);
+      const vars = { date: formatDate(iso, t.ui.when.dateLocale), when: whenPhrase(t, daysUntil(iso, todayISO())) };
+      if (nx.kind === 'watch') return fill(k.watch, vars);
+      return fill(nx.from >= nx.to ? k.settlesBy : k.settles, { ...vars, from: nx.from, to: nx.to });
+    })();
     return (
-      <div className="stack">
+      <div className="stack narrow">
         <section
           className={`card result result-${outcome}`}
           aria-live="polite"
           role="status"
           data-testid={`result-${outcome}`}
         >
+          <p className="eyebrow">{s.title} · {t.ui.week.label} {weekNum}</p>
           <h1>{res.title}</h1>
           <p>{res.body}</p>
           {urgent && (
@@ -70,10 +84,18 @@ export function ShedCheck() {
               </a>
             </div>
           )}
+          <div className="do-now">
+            <span className="do-now-label">{t.ui.doNowLabel}</span>
+            <p>{s.actions[outcome]}</p>
+          </div>
+          <p className="kabtak" data-testid="kabtak">
+            <span className="kabtak-label">{t.ui.kabTakLabel}</span>
+            <span>{kabTak}</span>
+          </p>
           {(urgent || outcome === 'see-doctor-soon' || outcome === 'unusual-for-week') && (
             <ConsultCta label={emergency ? t.links.consultNotUrgent : t.links.consult} urgent={urgent && !emergency} />
           )}
-          <p className="muted">{wz.saved}</p>
+          <p className="muted small">{wz.saved}</p>
         </section>
         <button type="button" className="btn btn-secondary" onClick={reset}>
           {wz.startOver}
@@ -85,7 +107,7 @@ export function ShedCheck() {
   const canNext = step === 1 ? weekText !== '' : step === 2 ? amount !== null : true;
 
   return (
-    <section className="card wizard" aria-labelledby="shed-title">
+    <section className="card wizard narrow" aria-labelledby="shed-title">
       <p className="eyebrow">{fill(wz.step, { a: step, b: 3 })}</p>
       <div className="dots" aria-hidden="true">
         {[1, 2, 3].map((n) => (

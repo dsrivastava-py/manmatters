@@ -41,7 +41,7 @@ export function PwaBar() {
 
   return (
     <div className="pwa-bar">
-      {ready && <span className="badge-offline" data-testid="offline-badge">{p.offline}</span>}
+      <span className={`badge-offline ${ready ? '' : 'pending'}`} data-testid="offline-badge" hidden={!ready}>{p.offline}</span>
       {evt && (
         <button
           type="button"

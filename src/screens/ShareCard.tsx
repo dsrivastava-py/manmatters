@@ -68,7 +68,7 @@ export function ShareCard({ go }: { go: (r: string) => void }) {
   const canShareFiles = typeof navigator !== 'undefined' && typeof navigator.canShare === 'function';
 
   return (
-    <div className="stack">
+    <div className="stack narrow">
       <section className="card" aria-labelledby="share-title">
         <h1 id="share-title">{s.title}</h1>
         <p className="lead">{s.lead}</p>
