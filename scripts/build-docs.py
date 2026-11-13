@@ -26,7 +26,6 @@ FONT = "Calibri"
 FILES = [
     ("part-1-customer-research.md", "Part-1-Customer-Conversations-Man-Matters.docx"),
     ("part-2-solution.md", "Part-2-Solution-Kab-Tak.docx"),
-    ("demo-video-script.md", "Demo-Video-Script-Kab-Tak.docx"),
 ]
 
 INLINE = re.compile(r"(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\)|\*[^*]+\*|\[Fill in[^\]]*\])")
