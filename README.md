@@ -65,7 +65,6 @@ Each document is kept as Markdown (easy to read on GitHub) and as Word (to uploa
 | --- | --- | --- |
 | Part 1: Customer conversations, patterns, problem statement, 44-point secondary research | [part-1-customer-research.md](docs/part-1-customer-research.md) | [Part-1-Customer-Conversations-Man-Matters.docx](docs/Part-1-Customer-Conversations-Man-Matters.docx) |
 | Part 2: What I built, how it solves the problem, key decisions, AI tools | [part-2-solution.md](docs/part-2-solution.md) | [Part-2-Solution-Kab-Tak.docx](docs/Part-2-Solution-Kab-Tak.docx) |
-| Demo video script (about 3 minutes) | [demo-video-script.md](docs/demo-video-script.md) | [Demo-Video-Script-Kab-Tak.docx](docs/Demo-Video-Script-Kab-Tak.docx) |
 
 **Consent:** names and phone numbers are shared only for the five customers who gave permission, and only in the Part 1 document, never in the app or in this repository. The secondary research uses public posts, cited by link only, with no usernames or contact details, since consent from those people was not needed or sought.
 
