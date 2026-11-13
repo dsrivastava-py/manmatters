@@ -207,7 +207,40 @@ def convert(md_path, out_path):
     doc.save(out_path)
 
 
+PRIVATE = ROOT / ".scratch" / "private"  # git-ignored; never pushed
+PUBLIC_CONSENT = (
+    "Their names and numbers are in the copy submitted to Mosaic and are left out of this public copy."
+)
+PRIVATE_CONSENT = "Their names and numbers are listed below for Mosaic only."
+
+
+def build_private_part1():
+    """Write the submission copy of Part 1 with customer names and numbers into .scratch/private/.
+
+    Reads .scratch/private/customers.json: [{"name": ..., "phone": ...}, ...] in C1..C5 order.
+    """
+    import json
+
+    data_file = PRIVATE / "customers.json"
+    if not data_file.exists():
+        return
+    customers = json.loads(data_file.read_text(encoding="utf-8"))
+    text = (DOCS / "part-1-customer-research.md").read_text(encoding="utf-8")
+    text = text.replace(PUBLIC_CONSENT, PRIVATE_CONSENT)
+    for n, c in enumerate(customers, start=1):
+        text = text.replace(f"Customer {n} name (shared in the submitted copy)", c["name"])
+        text = text.replace(f"Customer {n} phone (shared in the submitted copy)", c["phone"])
+    if "(shared in the submitted copy)" in text or PUBLIC_CONSENT in text:
+        raise SystemExit("private build: some name, phone or consent placeholders were not replaced")
+    tmp = PRIVATE / "part-1-submission.md"
+    tmp.write_text(text, encoding="utf-8")
+    out = PRIVATE / "Part-1-Customer-Conversations-Man-Matters-SUBMIT.docx"
+    convert(tmp, out)
+    print("wrote", out)
+
+
 if __name__ == "__main__":
     for src, out in FILES:
         convert(DOCS / src, DOCS / out)
         print("wrote", DOCS / out)
+    build_private_part1()

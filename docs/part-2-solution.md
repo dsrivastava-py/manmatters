@@ -14,7 +14,6 @@
 | --- | --- |
 | Working app (opens in any browser) | [dsrivastava-py.github.io/manmatters](https://dsrivastava-py.github.io/manmatters/) |
 | Source code | [github.com/dsrivastava-py/manmatters](https://github.com/dsrivastava-py/manmatters) |
-| Demo video | [Fill in: video link] |
 | Part 1 document | Submitted with this application |
 
 ## Short explanation
@@ -42,6 +41,18 @@ Every screen answers one question for the user's exact week. Together they cover
 | Do I have to keep using it? | Explains plainly that stopping commonly reverses gains, before it becomes a surprise | Maintenance card (month 6+) |
 | Am I applying it right? | A checklist that points to the label and the doctor. The app never gives dosing numbers | How to apply |
 | How do I tell my doctor? | A printable one-page summary and a shareable "My Week" image, with no personal data | Doctor summary, Share |
+
+## How it answers the five customers from Part 1
+
+| Customer | Their question | What Kab Tak? gives them |
+| --- | --- | --- |
+| C1, week-3 shed scare | "How do I tell normal shedding from the product making it worse?" | Your Week explains the shed window at his exact week. The shed check says if it is commonly reported, what to do and when it commonly eases, at midnight, with no callback needed. Red flags go to a doctor |
+| C2, lapse shed at month 5 | "If I miss a week or plateau, did it stop working?" | I slipped explains that a shed weeks after a missed fortnight is commonly a lapse, not failure, and shows how far his timeline moved |
+| C3, one-year responder | "How long do I have to keep paying for this?" | The maintenance card explains from the start that results need ongoing use, before it becomes a surprise |
+| C4, gummies and tonic, no change | "At month 3, should I keep waiting or see a doctor?" | The week-12 checkpoint gives a clear verdict. If nothing is improving, it says "Not responding yet, talk to a doctor" and links to the consult |
+| C5, low responder | "How many months before I accept it isn't working?" | Checkpoints at weeks 12 and 24 with same-light, same-angle photo steps, so the answer comes at month 3 or 6, not after month 7 |
+
+Customers' names and numbers are not used in the app.
 
 ## Key decisions and why
 
@@ -133,5 +144,5 @@ It can be linked from the Man Matters app, order emails, WhatsApp messages or th
 ## Limits and next steps
 
 - A doctor should review all medical wording and the checkpoint thresholds before real use.
-- Next, test it with the five customers from Part 1 and measure: fewer "is this normal?" support questions, fewer dropouts in weeks 2 to 4 and months 4 to 7, and how many "talk to a doctor" results lead to a consult.
+- Next, test it with the five customers from Part 1, then measure: fewer "is this normal?" support questions, fewer dropouts in weeks 2 to 4 and months 4 to 7, and how many "talk to a doctor" results lead to a consult.
 - This is an independent concept for this application, not an official Man Matters product.
