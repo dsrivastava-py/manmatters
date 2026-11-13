@@ -9,18 +9,23 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['brand/logo.png'],
+      includeAssets: ['brand/logo.png', 'icons/apple-touch-icon.png'],
       manifest: {
-        name: 'Kab Tak? (independent concept)',
-        short_name: 'Kab Tak?',
+        name: 'Kab Tak?',
+        short_name: 'Kab Tak',
+        description: 'An independent concept: what is commonly reported at your week of a hair routine. Works offline, no login.',
         start_url: './',
         scope: './',
         display: 'standalone',
         background_color: '#F2F7FC',
         theme_color: '#143461',
-        icons: [],
+        icons: [
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
       },
-      workbox: { globPatterns: ['**/*.{js,css,html,png,woff2,svg}'] },
+      workbox: { globPatterns: ['**/*.{js,css,html,png,woff2,woff,svg,ico,webmanifest}'], navigateFallback: 'index.html' },
     }),
   ],
   test: {

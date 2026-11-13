@@ -83,6 +83,11 @@ export function YourWeek({ go }: { go: (r: string) => void }) {
 
       {PHASES.find((p) => p.id === 'maintenance')!.from <= week && <Maintenance />}
 
+      <div className="actions no-print">
+        <button type="button" className="btn btn-secondary" onClick={() => go('share')}>{t.ui.share.open}</button>
+        <button type="button" className="btn btn-secondary" onClick={() => go('doctor')}>{t.ui.doctor.open}</button>
+      </div>
+
       <div className="sticky-cta">
         <button type="button" className="btn btn-accent btn-block" onClick={() => go('shed')}>
           {w.shedCta}

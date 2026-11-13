@@ -9,16 +9,19 @@ import { ShedCheck } from './screens/ShedCheck';
 import { Checkpoint } from './screens/Checkpoint';
 import { Slipped } from './screens/Slipped';
 import { HowToApply } from './screens/HowToApply';
+import { ShareCard } from './screens/ShareCard';
+import { DoctorSummary } from './screens/DoctorSummary';
+import { PwaBar } from './components/Pwa';
+import { NavIcon } from './components/NavIcon';
 
-const ROUTES = ['week', 'shed', 'checkpoint', 'slipped', 'apply'] as const;
+const NAV_ROUTES = ['week', 'shed', 'checkpoint', 'slipped', 'apply'] as const;
+const ROUTES = [...NAV_ROUTES, 'share', 'doctor'] as const;
 type Route = (typeof ROUTES)[number];
 
 function readRoute(): Route {
   const h = window.location.hash.replace(/^#\/?/, '');
   return (ROUTES as readonly string[]).includes(h) ? (h as Route) : 'week';
 }
-
-const ICONS: Record<Route, string> = { week: '◔', shed: '✦', checkpoint: '✓', slipped: '↺', apply: '☰' };
 
 function Shell() {
   const { t, lang, setLang, data } = useApp();
@@ -42,7 +45,7 @@ function Shell() {
   return (
     <div className={`app ${started ? 'with-nav' : ''}`}>
       <a className="skip" href="#main">{t.ui.header.skip}</a>
-      <header className="topbar">
+      <header className="topbar no-print">
         <div className="brand">
           <img src={LOGO} alt="Man Matters" className="logo" height={22} />
           <span className="appname">{t.app.name}</span>
@@ -67,8 +70,8 @@ function Shell() {
       </header>
 
       {started && (
-        <nav className="nav" aria-label={t.ui.nav.label}>
-          {ROUTES.map((r) => (
+        <nav className="nav no-print" aria-label={t.ui.nav.label}>
+          {NAV_ROUTES.map((r) => (
             <button
               type="button"
               key={r}
@@ -76,7 +79,7 @@ function Shell() {
               aria-current={route === r ? 'page' : undefined}
               onClick={() => go(r)}
             >
-              <span className="nav-ico" aria-hidden="true">{ICONS[r]}</span>
+              <span className="nav-ico" aria-hidden="true"><NavIcon name={r} /></span>
               <span>{t.ui.nav[r]}</span>
             </button>
           ))}
@@ -99,10 +102,15 @@ function Shell() {
           <Checkpoint />
         ) : route === 'slipped' ? (
           <Slipped />
+        ) : route === 'share' ? (
+          <ShareCard go={go} />
+        ) : route === 'doctor' ? (
+          <DoctorSummary go={go} />
         ) : (
           <HowToApply />
         )}
-        <footer className="footer">
+        <footer className="footer no-print">
+          <PwaBar />
           <ReviewNote />
           <p>{t.app.conceptDisclaimer}</p>
           <p>{t.app.medicalDisclaimer}</p>

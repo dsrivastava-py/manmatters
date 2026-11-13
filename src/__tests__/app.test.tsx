@@ -110,3 +110,24 @@ describe('settings', () => {
     expect(screen.getAllByTestId('review-note').length).toBeGreaterThan(0);
   });
 });
+
+describe('doctor summary', () => {
+  it('shows start date, weeks and disclaimer', () => {
+    start(30);
+    window.location.hash = '/doctor';
+    render(<App />);
+    expect(screen.getByRole('heading', { name: en.ui.doctor.title })).toBeInTheDocument();
+    expect(screen.getByText(en.ui.doctor.disclaimer)).toBeInTheDocument();
+    expect(screen.getAllByText(en.ui.doctor.none).length).toBeGreaterThan(0);
+  });
+});
+
+describe('share card screen', () => {
+  it('renders with no-personal-data note', () => {
+    start(30);
+    window.location.hash = '/share';
+    render(<App />);
+    expect(screen.getByRole('heading', { name: en.ui.share.title })).toBeInTheDocument();
+    expect(screen.getByText(en.ui.share.noPersonal)).toBeInTheDocument();
+  });
+});

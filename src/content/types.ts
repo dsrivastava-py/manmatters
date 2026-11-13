@@ -190,6 +190,42 @@ export interface Ui {
     cleared: string;
   };
   footer: { line: string };
+  share: {
+    open: string;
+    title: string;
+    lead: string;
+    cardTitle: string;
+    lastShed: string;
+    noShed: string;
+    checkpoints: string;
+    notDone: string;
+    consultLine: string;
+    noPersonal: string;
+    conceptTag: string;
+    share: string;
+    download: string;
+    shared: string;
+    downloaded: string;
+    failed: string;
+    previewAlt: string;
+    shareText: string;
+  };
+  doctor: {
+    open: string;
+    title: string;
+    print: string;
+    back: string;
+    startDate: string;
+    weeksElapsed: string;
+    checkpointsTitle: string;
+    none: string;
+    adherence: string;
+    lastShed: string;
+    noShed: string;
+    disclaimer: string;
+    dateLabel: string;
+  };
+  pwa: { offline: string; install: string; iosHint: string; dismiss: string };
 }
 
 /** Set to false only after a qualified clinician has reviewed all clinical text. */
