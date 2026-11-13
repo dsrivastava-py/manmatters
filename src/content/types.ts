@@ -9,7 +9,7 @@ export interface Content {
   app: {
     name: string;
     tagline: string;
-    marketingLines: string[];
+    features: { title: string; body: string }[];
     conceptDisclaimer: string;
     reviewPending: string;
     medicalDisclaimer: string;
@@ -53,6 +53,19 @@ export interface Content {
       'commonly-reported': TitledText;
       'unusual-for-week': TitledText;
     };
+    actions: {
+      'doctor-now': string;
+      'see-doctor-soon': string;
+      'commonly-reported': string;
+      'unusual-for-week': string;
+    };
+    kabTak: {
+      now: string;
+      consult: string;
+      settles: string;
+      settlesBy: string;
+      watch: string;
+    };
   };
   redFlags: {
     title: string;
@@ -80,11 +93,37 @@ export interface Content {
     };
     answers: { yes: string; no: string; unsure: string };
     results: {
-      responding: TitledText;
-      unclear: TitledText;
-      'not-responding': TitledText;
+      'on-track': CheckpointResultText;
+      'early-signs': CheckpointResultText;
+      'not-responding': CheckpointResultText;
+      'fix-routine': CheckpointResultText;
+      'too-early': CheckpointResultText;
+      'need-better-look': CheckpointResultText;
     };
-    lowAdherence: string;
+    reasons: {
+      'too-early': string;
+      'low-adherence': string;
+      'mostly-unsure': string;
+      'w12-shed-and-visible': string;
+      'w12-shed-only': string;
+      'w12-visible-only': string;
+      'w12-new-thinning': string;
+      'w24-visible': string;
+      'w24-partial': string;
+      'w24-new-thinning': string;
+      'no-positive': string;
+    };
+    signNames: {
+      lessShedding: string;
+      fillIn: string;
+      thicker: string;
+      consistentUse: string;
+      photoBetter: string;
+      newThinning: string;
+    };
+    roles: { main: string; bonus: string; routine: string; warning: string };
+    effects: { positive: string; negative: string; neutral: string };
+    lookSteps: string[];
     consultCta: string;
     doctorSummaryTitle: string;
   };
@@ -96,6 +135,18 @@ export interface Content {
       'short-gap': TitledText;
       'lapse-reset-expectations': TitledText;
       'long-gap-consult': TitledText;
+    };
+    actions: {
+      'short-gap': string;
+      'lapse-reset-expectations': string;
+      'long-gap-consult': string;
+    };
+    kabTak: {
+      'short-gap': string;
+      'lapse-reset-expectations': string;
+      'lapse-reset-one': string;
+      'long-gap-consult': string;
+      nextCheckGeneric: string;
     };
   };
   maintenance: TitledText & { points: string[] };
@@ -114,9 +165,19 @@ export interface Content {
   ui: Ui;
 }
 
+export interface CheckpointResultText {
+  title: string;
+  body: string;
+  action: string;
+  kabTak: string;
+}
+
 export interface Ui {
   nav: { week: string; shed: string; checkpoint: string; slipped: string; apply: string; label: string };
-  header: { settings: string; conceptPill: string; langLabel: string; skip: string };
+  header: { settings: string; conceptPill: string; conceptPillLabel: string; langLabel: string; skip: string; themeLabel: string };
+  when: { today: string; thisWeek: string; inOne: string; inN: string; dateLocale: string };
+  kabTakLabel: string;
+  doNowLabel: string;
   onboarding: {
     title: string;
     lead: string;
@@ -133,18 +194,37 @@ export interface Ui {
     timelineLabel: string;
     spikeShed: string;
     spikeDoubt: string;
-    checkpointMark: string;
-    nextCheckpoint: string;
-    nextCheckpointOne: string;
     checkpointToday: string;
+    nextLine: string;
+    started: string;
     commonlyTitle: string;
     doNowTitle: string;
     doNow: string[];
     watchTitle: string;
     watch: string[];
     shedCta: string;
+    shedCtaHint: string;
     beyondTimeline: string;
     maintenanceHonest: string;
+  };
+  journey: {
+    title: string;
+    youAreHere: string;
+    done: string;
+    weekOne: string;
+    weekRange: string;
+    weekFrom: string;
+    startedOn: string;
+    steps: {
+      start: string;
+      'shed-window': string;
+      settling: string;
+      'early-signs': string;
+      'checkpoint-1': string;
+      'visible-change': string;
+      'checkpoint-2': string;
+      maintenance: string;
+    };
   };
   wizard: {
     step: string;
@@ -159,8 +239,6 @@ export interface Ui {
   checkpoint: {
     intro: string;
     start: string;
-    earlyNote: string;
-    notSaved: string;
     submit: string;
     needAll: string;
     historyTitle: string;
@@ -168,6 +246,14 @@ export interface Ui {
     retake: string;
     weekLabel: string;
     questionsTitle: string;
+    whyTitle: string;
+    nextCheck: string;
+    selfCheck: string;
+    tooEarlyNormal: string;
+    baselineTitle: string;
+    lookTitle: string;
+    retakeLook: string;
+    historyNext: string;
   };
   slipped: {
     intro: string;
@@ -192,11 +278,19 @@ export interface Ui {
     aboutBody: string;
     alongside: string;
     reviewTitle: string;
+    theme: string;
+    themeOptions: { light: string; dark: string; system: string };
+    appTitle: string;
+    projectTitle: string;
+    projectBody: string;
+    builtBy: string;
+    emailLabel: string;
+    phoneLabel: string;
     confirm: string;
     cancel: string;
     cleared: string;
   };
-  footer: { line: string };
+  footer: { disclaimer: string; alongside: string; credit: string; about: string };
   share: {
     open: string;
     title: string;

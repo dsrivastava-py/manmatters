@@ -1,97 +1,140 @@
-import { PHASES, getPhase } from '../engine/phases';
-import { CHECKPOINT_WEEKS } from '../engine/checkpoint';
-import { fill, useApp } from '../state/AppState';
+import { JOURNEY, PHASES, getPhase, journeyIndex, nextMilestone, weekStartISO } from '../engine/phases';
+import type { JourneyStep } from '../engine/phases';
+import { isCheckpointWeek } from '../engine/checkpoint';
+import { fill, todayISO, useApp } from '../state/AppState';
+import type { Content } from '../content';
+import { daysUntil, formatDate, whenPhrase } from '../lib/when';
+import { CardHead, Icon } from '../components/NavIcon';
 import { Maintenance } from './Maintenance';
 
-const TIMELINE_WEEKS = 24;
-const SPIKES = [
-  { week: 3, key: 'spikeShed' as const },
-  { week: 10, key: 'spikeDoubt' as const },
-];
+function stepWeeks(t: Content, s: JourneyStep): string {
+  const j = t.ui.journey;
+  if (s.to === null) return fill(j.weekFrom, { n: s.from });
+  if (s.from === s.to) return fill(j.weekOne, { n: s.from });
+  return fill(j.weekRange, { from: s.from, to: s.to });
+}
 
 export function YourWeek({ go }: { go: (r: string) => void }) {
-  const { t, week } = useApp();
-  if (week === null) return null;
+  const { t, week, data } = useApp();
+  if (week === null || !data.startDate) return null;
+  const start = data.startDate;
+  const today = todayISO();
+  const locale = t.ui.when.dateLocale;
   const phaseId = getPhase(week);
   const phase = t.phases[phaseId];
   const w = t.ui.week;
-  const pct = Math.min(week, TIMELINE_WEEKS) / TIMELINE_WEEKS;
-  const nextCp = CHECKPOINT_WEEKS.find((c) => c > week);
-  const onCp = (CHECKPOINT_WEEKS as readonly number[]).includes(week);
-  const pos = (n: number) => `${(n / TIMELINE_WEEKS) * 100}%`;
+  const j = t.ui.journey;
+  const here = journeyIndex(week);
+  const next = nextMilestone(week);
+  const nextDate = next ? weekStartISO(start, next.week) : null;
+  const nextLine =
+    next && nextDate
+      ? fill(w.nextLine, {
+          name: j.steps[next.step.id],
+          date: formatDate(nextDate, locale),
+          when: whenPhrase(t, daysUntil(nextDate, today)),
+        })
+      : w.beyondTimeline;
 
   return (
-    <div className="stack">
-      <section className="card hero" aria-labelledby="week-hero">
-        <p className="eyebrow">{w.phaseLabel}</p>
-        <h1 id="week-hero" className="hero-week">
-          {w.label} <span data-testid="week-number">{week}</span>
-        </h1>
-        <p className="phase-name">{phase.title}</p>
+    <div className="week-grid">
+      <div className="week-main stack">
+        <section className="card hero" aria-labelledby="week-hero">
+          <p className="eyebrow">{w.phaseLabel}</p>
+          <h1 id="week-hero" className="hero-week">
+            {w.label} <span data-testid="week-number">{week}</span>
+          </h1>
+          <p className="phase-name">{phase.title}</p>
+          {isCheckpointWeek(week) ? (
+            <button type="button" className="kabtak kabtak-btn" onClick={() => go('checkpoint')}>
+              <span className="kabtak-label">{t.ui.kabTakLabel}</span>
+              <span>{w.checkpointToday}</span>
+              <Icon name="arrow" size={18} />
+            </button>
+          ) : (
+            <p className="kabtak" data-testid="next-milestone">
+              <span className="kabtak-label">{t.ui.kabTakLabel}</span>
+              <span>{nextLine}</span>
+            </p>
+          )}
+        </section>
 
-        <div
-          className="timeline"
-          role="img"
-          aria-label={`${w.timelineLabel}: ${w.label} ${week}`}
-        >
-          <div className="track">
-            <div className="fill" style={{ width: `${pct * 100}%` }} />
-            {SPIKES.map((s) => (
-              <span key={s.key} className="mark spike" style={{ left: pos(s.week) }} title={w[s.key]} />
-            ))}
-            {CHECKPOINT_WEEKS.map((c) => (
-              <span key={c} className="mark cp" style={{ left: pos(c) }} title={`${w.checkpointMark} ${c}`} />
-            ))}
-            <span className="you" style={{ left: pos(Math.min(week, TIMELINE_WEEKS)) }} />
-          </div>
-        </div>
-        <ul className="legend">
-          <li><span className="dot spike" /> {w.spikeShed}</li>
-          <li><span className="dot spike" /> {w.spikeDoubt}</li>
-          <li><span className="dot cp" /> {w.checkpointMark} 12, 24</li>
-        </ul>
+        <section className="card" aria-labelledby="journey-title">
+          <CardHead icon="route" title={j.title} id="journey-title" />
+          <ol className="journey" aria-label={w.timelineLabel}>
+            {JOURNEY.map((s, i) => {
+              const state = i < here ? 'done' : i === here ? 'current' : 'todo';
+              const isNext = next?.step.id === s.id;
+              const date = s.id === 'start' ? start : weekStartISO(start, s.from);
+              return (
+                <li
+                  key={s.id}
+                  className={`j-step j-${state} ${s.checkpoint ? 'j-cp' : ''} ${isNext ? 'j-next' : ''}`}
+                  aria-current={state === 'current' ? 'step' : undefined}
+                >
+                  <span className="j-dot" aria-hidden="true">{state === 'done' && <Icon name="check" size={12} />}</span>
+                  <span className="j-body">
+                    <span className="j-title">
+                      {j.steps[s.id]}
+                      {state === 'current' && <span className="j-here">{j.youAreHere}</span>}
+                    </span>
+                    <span className="j-meta">
+                      {s.id === 'start' ? fill(j.startedOn, { date: formatDate(start, locale) }) : stepWeeks(t, s)}
+                      {isNext && (
+                        <>
+                          {' · '}
+                          <strong>{formatDate(date, locale)}</strong>
+                          {' · '}
+                          {whenPhrase(t, daysUntil(date, today))}
+                        </>
+                      )}
+                    </span>
+                    {state === 'current' && s.id === 'shed-window' && <span className="j-note">{w.spikeShed}</span>}
+                    {state === 'current' && s.id === 'early-signs' && <span className="j-note">{w.spikeDoubt}</span>}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      </div>
 
-        {onCp ? (
-          <button type="button" className="notice notice-btn" onClick={() => go('checkpoint')}>
-            {w.checkpointToday}
+      <div className="week-side stack">
+        <div className="fab-wrap no-print">
+          <button type="button" className="btn btn-accent btn-block fab" onClick={() => go('shed')} aria-label={w.shedCta} aria-describedby="fab-hint">
+            <Icon name="shed" size={20} />
+            <span className="fab-text">
+              <span>{w.shedCta}</span>
+              <span className="fab-hint" id="fab-hint">{w.shedCtaHint}</span>
+            </span>
           </button>
-        ) : nextCp ? (
-          <p className="notice">
-            {fill(nextCp - week === 1 ? w.nextCheckpointOne : w.nextCheckpoint, { n: nextCp === 12 ? 1 : 2, weeks: nextCp - week })}
-          </p>
-        ) : (
-          <p className="notice">{w.beyondTimeline}</p>
-        )}
-      </section>
+        </div>
 
-      <section className="card" aria-labelledby="common-title">
-        <h2 id="common-title">{w.commonlyTitle}</h2>
-        <p>{phase.body}</p>
-        <p className="muted">{t.app.commonlyReportedNote}</p>
-      </section>
+        <section className="card" aria-labelledby="common-title">
+          <CardHead icon="info" title={w.commonlyTitle} id="common-title" />
+          <p>{phase.body}</p>
+          <p className="muted small">{t.app.commonlyReportedNote}</p>
+        </section>
 
-      <div className="two-col">
         <section className="card" aria-labelledby="do-title">
-          <h2 id="do-title">{w.doNowTitle}</h2>
+          <CardHead icon="check" title={w.doNowTitle} id="do-title" />
           <ul className="bullets">{w.doNow.map((x) => <li key={x}>{x}</li>)}</ul>
         </section>
         <section className="card" aria-labelledby="watch-title">
-          <h2 id="watch-title">{w.watchTitle}</h2>
+          <CardHead icon="eye" title={w.watchTitle} id="watch-title" />
           <ul className="bullets">{w.watch.map((x) => <li key={x}>{x}</li>)}</ul>
         </section>
-      </div>
 
-      {PHASES.find((p) => p.id === 'maintenance')!.from <= week && <Maintenance />}
+        {PHASES.find((p) => p.id === 'maintenance')!.from <= week && <Maintenance />}
 
-      <div className="actions no-print">
-        <button type="button" className="btn btn-secondary" onClick={() => go('share')}>{t.ui.share.open}</button>
-        <button type="button" className="btn btn-secondary" onClick={() => go('doctor')}>{t.ui.doctor.open}</button>
-      </div>
-
-      <div className="sticky-cta">
-        <button type="button" className="btn btn-accent btn-block" onClick={() => go('shed')}>
-          {w.shedCta}
-        </button>
+        <div className="actions no-print">
+          <button type="button" className="btn btn-secondary" onClick={() => go('share')}>
+            <Icon name="share" size={18} /> {t.ui.share.open}
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={() => go('doctor')}>
+            <Icon name="doc" size={18} /> {t.ui.doctor.open}
+          </button>
+        </div>
       </div>
     </div>
   );

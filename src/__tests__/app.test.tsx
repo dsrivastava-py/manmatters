@@ -121,50 +121,155 @@ describe('checkpoint', () => {
   });
 });
 
-describe('checkpoint edge cases', () => {
-  const answerAll = (val: 'yes' | 'no' | 'unsure') => {
+describe('checkpoint outcomes', () => {
+  const idx = { yes: 0, no: 1, unsure: 2 } as const;
+  type Q = keyof typeof en.checkpoint.questions;
+  const answer = (vals: Partial<Record<Q, 'yes' | 'no' | 'unsure'>>, rest: 'yes' | 'no' | 'unsure' = 'no') => {
     fireEvent.click(screen.getByRole('button', { name: en.ui.checkpoint.start }));
     const form = document.querySelector('form')!;
-    const idx = { yes: 0, no: 1, unsure: 2 }[val];
-    for (const q of Object.keys(en.checkpoint.questions)) {
-      fireEvent.click(form.querySelectorAll<HTMLInputElement>(`input[name="${q}"]`)[idx]);
+    for (const q of Object.keys(en.checkpoint.questions) as Q[]) {
+      const v = vals[q] ?? (q === 'consistentUse' ? 'yes' : rest);
+      fireEvent.click(form.querySelectorAll<HTMLInputElement>(`input[name="${q}"]`)[idx[v]]);
     }
     fireEvent.click(screen.getByRole('button', { name: en.ui.checkpoint.submit }));
   };
 
-  it('early peek is not saved and cannot say not-responding', () => {
+  it('before week 12 shows a clear too-early card with the checkpoint 1 date, no questions, nothing saved', () => {
     start(14);
     window.location.hash = '/checkpoint';
     render(<App />);
-    answerAll('no');
-    expect(screen.queryByTestId('result-not-responding')).toBeNull();
-    expect(screen.getByTestId('result-unclear')).toHaveTextContent(en.ui.checkpoint.notSaved);
+    const card = screen.getByTestId('result-too-early');
+    expect(card).toHaveTextContent(en.checkpoint.results['too-early'].title);
+    expect(card).toHaveTextContent(/Checkpoint 1 is on .+ \(in 9 weeks\)/);
+    expect(card).toHaveTextContent(en.ui.checkpoint.baselineTitle);
+    expect(screen.queryByRole('button', { name: en.ui.checkpoint.start })).toBeNull();
     expect(screen.queryByTestId('consult-cta')).toBeNull();
     expect(loadData().checkpoints).toHaveLength(0);
   });
 
-  it('all "Not sure" at week 12 is unclear and is saved as week 12', () => {
+  it('less shedding only at week 12 is "Early signs, keep going" with the week 24 date and a breakdown', () => {
     start(7 * 11);
     window.location.hash = '/checkpoint';
     render(<App />);
-    answerAll('unsure');
-    expect(screen.getByTestId('result-unclear')).toBeInTheDocument();
+    answer({ lessShedding: 'yes' });
+    const result = screen.getByTestId('result-early-signs');
+    expect(result).toHaveTextContent(en.checkpoint.results['early-signs'].title);
+    expect(within(result).getByTestId('reason')).toHaveTextContent('You said yes to: Less shedding.');
+    expect(within(result).getByTestId('kabtak')).toHaveTextContent(/checkpoint 2, .+ \(in 12 weeks\)/);
+    expect(result).toHaveTextContent(en.ui.checkpoint.whyTitle);
+    expect(result).toHaveTextContent(en.checkpoint.roles.main);
+    expect(within(result).getByTestId('review-note')).toBeInTheDocument();
+    expect(within(result).queryByTestId('consult-cta')).toBeNull();
+    expect(loadData().checkpoints[0]).toMatchObject({ week: 12, result: 'early-signs' });
+  });
+
+  it('routine not followed is "Fix the routine first" with a recheck date and a consult option', () => {
+    start(7 * 11);
+    window.location.hash = '/checkpoint';
+    render(<App />);
+    answer({ consistentUse: 'no', lessShedding: 'yes' });
+    const result = screen.getByTestId('result-fix-routine');
+    expect(within(result).getByTestId('kabtak')).toHaveTextContent(/in 8 weeks/);
+    expect(within(result).getByTestId('consult-cta')).toHaveAttribute('href', CONSULT_URL);
+  });
+
+  it('all "Not sure" at week 12 is need-better-look with photo steps and a retake button, saved as week 12', () => {
+    start(7 * 11);
+    window.location.hash = '/checkpoint';
+    render(<App />);
+    answer({ newThinning: 'no' }, 'unsure');
+    const result = screen.getByTestId('result-need-better-look');
+    expect(result).toHaveTextContent(en.checkpoint.lookSteps[0]);
     expect(loadData().checkpoints.map((c) => c.week)).toEqual([12]);
+    fireEvent.click(within(result).getByRole('button', { name: en.ui.checkpoint.retakeLook }));
+    expect(screen.getByRole('button', { name: en.ui.checkpoint.submit })).toBeInTheDocument();
+  });
+
+  it('week 24 with two visible signs is on track', () => {
+    start(7 * 23);
+    window.location.hash = '/checkpoint';
+    render(<App />);
+    answer({ fillIn: 'yes', photoBetter: 'yes' });
+    expect(screen.getByTestId('result-on-track')).toHaveTextContent(en.checkpoint.results['on-track'].title);
+    expect(loadData().checkpoints[0].week).toBe(24);
   });
 });
 
-describe('week label', () => {
-  it('uses the singular for 1 week to go', () => {
-    start(7 * 10 + 1);
+describe('Your Week journey', () => {
+  it('shows the next milestone with a date and "in 1 week"', () => {
+    start(7 * 10);
     render(<App />);
-    expect(screen.getByText('Checkpoint 1 is in 1 week')).toBeInTheDocument();
+    expect(screen.getByTestId('next-milestone')).toHaveTextContent(/Next: Checkpoint 1 on .+, in 1 week/);
+    expect(screen.getByText(en.ui.journey.youAreHere)).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem').some((li) => li.getAttribute('aria-current') === 'step')).toBe(true);
   });
 
-  it('uses the singular in Hinglish too', () => {
+  it('uses Hinglish for the milestone too', () => {
     updateData({ language: 'hinglish' });
-    start(7 * 10 + 1);
+    start(7 * 10);
     render(<App />);
-    expect(screen.getByText('Checkpoint 1 1 hafte mein hai')).toBeInTheDocument();
+    expect(screen.getByTestId('next-milestone')).toHaveTextContent(/Agla: Checkpoint 1, .+ ko, 1 hafte mein/);
+  });
+});
+
+describe('Kab tak? lines', () => {
+  it('shed check at week 3 says when it commonly settles and when to check again', () => {
+    start(14);
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: en.ui.week.shedCta }));
+    fireEvent.click(screen.getByRole('button', { name: en.ui.wizard.next }));
+    fireEvent.click(screen.getByLabelText(en.shedCheck.amountOptions['a-bit-more']));
+    fireEvent.click(screen.getByRole('button', { name: en.ui.wizard.next }));
+    fireEvent.click(screen.getByRole('button', { name: en.ui.wizard.seeResult }));
+    const result = screen.getByTestId('result-commonly-reported');
+    expect(within(result).getByTestId('kabtak')).toHaveTextContent(/between weeks 5 and 8\. Check again on .+ \(in 2 weeks\)/);
+    expect(result).toHaveTextContent(en.shedCheck.actions['commonly-reported']);
+  });
+
+  it('slipped result moves the next milestone by the gap', () => {
+    start(14);
+    window.location.hash = '/slipped';
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: `10 ${en.ui.slipped.unit}` }));
+    const result = screen.getByTestId('result-lapse-reset-expectations');
+    expect(within(result).getByTestId('kabtak')).toHaveTextContent(/roughly 2 weeks\. Expect Shed settling around/);
+    expect(result).toHaveTextContent(en.lapse.actions['lapse-reset-expectations']);
+  });
+});
+
+describe('footer and header', () => {
+  it('has one compact footer with a single concept line, links and the builder credit', () => {
+    start(14);
+    render(<App />);
+    const footer = document.querySelector('footer')!;
+    expect(footer.textContent!.match(/independent concept/gi)).toHaveLength(1);
+    expect(footer).toHaveTextContent('Built by Devansh Srivastava (Kirori Mal College, DU) for the Mosaic Wellness Fellowship Builder Challenge.');
+    expect(within(footer).getByRole('link', { name: en.links.privacy })).toBeInTheDocument();
+    expect(within(footer).queryByTestId('review-note')).toBeNull();
+  });
+});
+
+describe('theme', () => {
+  it('switches dark, light and system from Settings and persists the choice', () => {
+    start(14);
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: en.ui.header.settings }));
+    fireEvent.click(screen.getByTestId('theme-dark'));
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(localStorage.getItem('kabtak.theme')).toBe('dark');
+    fireEvent.click(screen.getByTestId('theme-light'));
+    expect(document.documentElement.dataset.theme).toBe('light');
+    fireEvent.click(screen.getByTestId('theme-system'));
+    expect(localStorage.getItem('kabtak.theme')).toBeNull();
+  });
+
+  it('about sheet has the project section with mailto and tel links', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: en.ui.header.conceptPillLabel }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent(en.ui.settings.projectTitle);
+    expect(within(dialog).getByRole('link', { name: /devanshsrivastava\.reads@gmail\.com/ })).toHaveAttribute('href', 'mailto:devanshsrivastava.reads@gmail.com');
+    expect(within(dialog).getByRole('link', { name: /8736956764/ })).toHaveAttribute('href', 'tel:+918736956764');
   });
 });
 
@@ -210,8 +315,9 @@ describe('settings', () => {
     expect(loadData().startDate).toBeNull();
   });
 
-  it('shows the medical review pending note', () => {
+  it('shows the medical review pending note in Settings', () => {
     render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: en.ui.header.settings }));
     expect(screen.getAllByTestId('review-note').length).toBeGreaterThan(0);
   });
 });

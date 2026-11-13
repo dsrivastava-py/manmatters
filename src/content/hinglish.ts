@@ -6,10 +6,10 @@ export const hinglish: Content = {
   app: {
     name: 'Kab Tak?',
     tagline: 'Hair ka progress, sach ke saath.',
-    marketingLines: [
-      'Ye normal hai ya nahi? Abhi jaaniye.',
-      'Koi jhootha vaada nahi. Bas ek realistic timeline.',
-      'Jaaniye kab rukna hai aur kab doctor se poochna hai.',
+    features: [
+      { title: 'Ye normal hai?', body: 'Aapke week par aam taur par kya bataya jata hai.' },
+      { title: 'Kab tak?', body: 'Agla milestone, asli date ke saath.' },
+      { title: 'Kaam kar raha hai?', body: 'Week 12 aur 24 par seedha jawab.' },
     ],
     conceptDisclaimer: 'Independent concept hai, official Man Matters product nahi.',
     reviewPending: 'Content ka medical review baaki hai.',
@@ -29,7 +29,7 @@ export const hinglish: Content = {
   },
   phases: {
     'settling-in': {
-      title: 'Shuruaat ke hafte',
+      title: 'Shedding ka samay',
       body: 'Week 1 se 4. Kuch log aam taur par bataate hain ki shuru mein baal zyada jhadte hain. Dar lagna normal hai, aur ye aksar process ka hissa hota hai. Routine jaari rakhein aur dekhte rahein.',
     },
     'shed-settling': {
@@ -74,6 +74,19 @@ export const hinglish: Content = {
       dizziness: 'Chakkar aana',
       chest: 'Seene mein dard ya dhadkan tez hona',
       severeIrritation: 'Scalp par bahut jalan, rash ya tez irritation',
+    },
+    actions: {
+      'doctor-now': 'Aaj hi product use band karein aur doctor se baat karein.',
+      'see-doctor-soon': 'Is hafte doctor consult book karein.',
+      'commonly-reported': 'Routine bilkul waise hi rakhein. Kuch naya na jodein, kuch band na karein.',
+      'unusual-for-week': 'Wajah jaanne ke liye is hafte doctor consult book karein.',
+    },
+    kabTak: {
+      now: 'Abhi. Iske thamne ka intezaar na karein.',
+      consult: 'Thamne ka intezaar na karein. Is hafte doctor se baat karein.',
+      settles: 'Aam taur par bataya jata hai ki extra shedding week {from} se {to} ke beech kam hone lagti hai. {date} ko phir check karein ({when}).',
+      settlesBy: 'Aam taur par bataya jata hai ki extra shedding week {to} tak kam hone lagti hai. {date} ko phir check karein ({when}).',
+      watch: 'Aap aam shedding window ke paar hain, isliye {date} ko phir check karein ({when}). Tab tak kam na ho to doctor se baat karein.',
     },
     outcomes: {
       'doctor-now': {
@@ -125,20 +138,72 @@ export const hinglish: Content = {
     },
     answers: { yes: 'Haan', no: 'Nahi', unsure: 'Pata nahi' },
     results: {
-      responding: {
-        title: 'Lagta hai asar ho raha hai',
-        body: 'Kai sanket sahi disha mein hain. Jaari rakhein aur agle checkpoint par phir dekhein.',
+      'on-track': {
+        title: 'Sahi raaste par',
+        body: 'Is checkpoint tak jo sanket aam taur par bataye jate hain, woh dikh rahe hain.',
+        action: 'Routine bilkul waise hi jaari rakhein.',
+        kabTak: 'Agla check: {label}, {date} ({when}).',
       },
-      unclear: {
-        title: 'Abhi saaf nahi hai',
-        body: 'Sanket mile-jule hain. Ye aam baat hai. Routine par tike rahein aur phir check karein, ya pakka jawab ke liye doctor se poochein.',
+      'early-signs': {
+        title: 'Shuruaati sanket, jaari rakhein',
+        body: 'Kuch achhe sanket dikh rahe hain. Dikhne wala badlav aam taur par zyada waqt leta hai, isliye ye achhi jagah hai.',
+        action: 'Routine steady rakhein aur agli baar ke liye same light mein photos lein.',
+        kabTak: 'Agla check: {label}, {date} ({when}).',
       },
       'not-responding': {
-        title: 'Abhi tak asar nahi dikha',
-        body: 'Jo sanket ab tak aam taur par dikhte hain woh aapko nahi dikh rahe. Isme aapki galti nahi hai. Plan review karwane ke liye doctor se milein.',
+        title: 'Abhi asar nahi dikha, doctor se baat karein',
+        body: 'Jo sanket ab tak aam taur par dikhte hain woh aapko nahi dikh rahe. Isme aapki galti nahi hai. Doctor aapka plan review kar sakte hain.',
+        action: 'Doctor consult book karein aur unhe apni summary dikhayein.',
+        kabTak: 'Agle checkpoint ka intezaar na karein. Is hafte doctor se baat karein.',
+      },
+      'fix-routine': {
+        title: 'Pehle routine theek karein',
+        body: 'Jo routine zyadatar din follow nahi hui, use ye check judge nahi kar sakta. Koi dosh nahi, sabke saath hota hai.',
+        action: 'Aaj se routine phir shuru karein aur steady rakhein.',
+        kabTak: 'Steady routine ke baad {date} ko phir check karein ({when}).',
+      },
+      'too-early': {
+        title: 'Judge karne ke liye abhi jaldi hai',
+        body: 'Week 12 se pehle dikhne wala badlav aam taur par expect nahi kiya jata, isliye abhi fair judge karne ko kuch nahi hai.',
+        action: 'Abhi baseline photos le lein, taaki checkpoint 1 par fair compare ho sake.',
+        kabTak: 'Checkpoint 1 {date} ko hai ({when}).',
+      },
+      'need-better-look': {
+        title: 'Thoda achhe se dekhna hoga',
+        body: 'Aapke zyadatar jawab "Pata nahi" the, matlab photos compare karna mushkil hai.',
+        action: 'Neeche diye steps se fair photos lein, phir check dobara karein.',
+        kabTak: 'Fair photos milte hi dobara karein, ho sake to isi hafte.',
       },
     },
-    lowAdherence: 'Kaafi din routine chhoot gayi. Pehle routine theek karna accha agla kadam hai. Koi dosh nahi, sabke saath hota hai.',
+    reasons: {
+      'too-early': 'Aap week {week} mein hain. Pehla fair check week 12 par hai.',
+      'low-adherence': 'Aapne bataya ki routine zyadatar din follow nahi hui.',
+      'mostly-unsure': 'Zyadatar sanketon ke baare mein aap pakka nahi the.',
+      'w12-shed-and-visible': 'Aapne haan kaha: {yes}. Week 12 par ye aam umeed se zyada hai.',
+      'w12-shed-only': 'Aapne haan kaha: {yes}. Week 12 par yahi mukhya sanket hai. Bharna aam taur par baad mein dikhta hai.',
+      'w12-visible-only': 'Aapne haan kaha: {yes}. Shedding abhi kam nahi hui, uspar nazar rakhein.',
+      'w12-new-thinning': 'Aapne haan kaha: {yes}, par nayi jagah baal patle bhi dikhe, jo doctor ko dikhana theek hai.',
+      'w24-visible': 'Aapne haan kaha: {yes}. Week 24 par dikhne wala badlav hi maayne rakhta hai.',
+      'w24-partial': 'Aapne haan kaha: {yes}. Week 24 tak aam taur par zyada dikhne wala badlav bataya jata hai.',
+      'w24-new-thinning': 'Aapko nayi jagah baal patle dikhe. Week 24 par ye doctor se milne ki wajah hai.',
+      'no-positive': 'Steady routine ke baad bhi kisi sanket ka jawab haan nahi tha.',
+    },
+    signNames: {
+      lessShedding: 'Kam shedding',
+      fillIn: 'Bharta hua',
+      thicker: 'Ghane lagte hain',
+      consistentUse: 'Routine follow hui',
+      photoBetter: 'Photos behtar',
+      newThinning: 'Naya patlapan',
+    },
+    roles: { main: 'Mukhya sanket', bonus: 'Bonus', routine: 'Routine', warning: 'Chetavni sanket' },
+    effects: { positive: 'Gina gaya', negative: 'Khilaf', neutral: 'Nahi gina' },
+    lookSteps: [
+      'Aaj do photos lein: sir ka upar ka hissa aur hairline',
+      'Baseline wala hi kamra, light aur doori rakhein',
+      'Baal sookhe aur same parting mein rakhein',
+      'Baseline ke saath side by side rakh kar phir jawab dein',
+    ],
     consultCta: 'Doctor se baat karein',
     doctorSummaryTitle: 'Doctor ko dikhane ke liye summary',
   },
@@ -147,6 +212,18 @@ export const hinglish: Content = {
     question: 'Kitne din routine chhooti?',
     lapseVsPlateau:
       'Lapse matlab aapne routine rok di. Plateau matlab aap routine par hain par kuch badalta nahi dikh raha. Dono mein alag kadam chahiye.',
+    actions: {
+      'short-gap': 'Aaj se phir shuru karein. Double na karein.',
+      'lapse-reset-expectations': 'Aaj se shuru karein, aur kaise shuru karna hai ye product label ya doctor se dekhein.',
+      'long-gap-consult': 'Dobara shuru karne se pehle doctor se baat karein.',
+    },
+    kabTak: {
+      'short-gap': 'Itna chhota gap aam taur par khaas farq nahi daalta. {milestone} {date} ko hi rahega ({when}).',
+      'lapse-reset-expectations': 'Aam taur par timeline gap jitni aage khisak jati hai, lagbhag {shift} hafte. {milestone} lagbhag {date} ke aas paas expect karein ({when}).',
+      'lapse-reset-one': 'Aam taur par timeline gap jitni aage khisak jati hai, lagbhag 1 hafta. {milestone} lagbhag {date} ke aas paas expect karein ({when}).',
+      'long-gap-consult': 'Dobara shuru karne se pehle, is hafte doctor se baat karein.',
+      nextCheckGeneric: 'Aapka agla self-check',
+    },
     outcomes: {
       'short-gap': {
         title: 'Chhota gap hai, aage badhein',
@@ -193,7 +270,10 @@ export const hinglish: Content = {
   },
   ui: {
     nav: { week: 'Aapka hafta', shed: 'Shed check', checkpoint: 'Checkpoint', slipped: 'Routine chhoota', apply: 'Kaise lagayein', label: 'Mukhya sections' },
-    header: { settings: 'Settings', conceptPill: 'Independent concept', langLabel: 'Bhasha', skip: 'Seedhe content par jayein' },
+    header: { settings: 'Settings', conceptPill: 'Concept', conceptPillLabel: 'Independent concept. Is project ke baare mein', langLabel: 'Bhasha', skip: 'Seedhe content par jayein', themeLabel: 'Theme' },
+    when: { today: 'aaj', thisWeek: 'is hafte', inOne: '1 hafte mein', inN: '{n} hafte mein', dateLocale: 'en-IN' },
+    kabTakLabel: 'Kab tak?',
+    doNowLabel: 'Abhi ye karein',
     onboarding: {
       title: 'Aapne kab shuru kiya?',
       lead: 'Start date chuniye aur dekhiye timeline mein aap kahan hain. Sign-up nahi. Photo nahi. Bas aapka hafta, sach ke saath.',
@@ -213,12 +293,11 @@ export const hinglish: Content = {
       label: 'Week',
       phaseLabel: 'Aap yahan hain',
       timelineLabel: 'Aapki 24 hafte ki timeline',
-      spikeShed: 'Shedding ka darr',
-      spikeDoubt: 'Kya ye kaam kar raha hai? ka shak',
-      checkpointMark: 'Checkpoint',
-      nextCheckpoint: 'Checkpoint {n} {weeks} hafte mein hai',
-      nextCheckpointOne: 'Checkpoint {n} 1 hafte mein hai',
+      spikeShed: 'Yahan shedding ka darr aam hai',
+      spikeDoubt: 'Yahan "kaam kar raha hai?" ka shak aam hai',
       checkpointToday: 'Ye checkpoint ka hafta hai. Apni honest self-check ka time.',
+      nextLine: 'Agla: {name}, {date} ko, {when}',
+      started: '{date} ko shuru kiya',
       commonlyTitle: 'Is stage par aam taur par ye bataya jata hai',
       doNowTitle: 'Abhi kya karein',
       doNow: [
@@ -233,8 +312,28 @@ export const hinglish: Content = {
         'Kuch bhi chinta de to doctor bas ek tap door hai',
       ],
       shedCta: 'Mere baal zyada jhad rahe hain',
+      shedCtaHint: '3 step ka jhatpat check',
       maintenanceHonest: 'Seedhi baat: routine band karne par baal aam taur par wapas pehle jaise hone lagte hain. Jo mila hai use banaye rakhne ke liye jaari rakhna zaroori hai.',
       beyondTimeline: 'Aap 24 hafte ke paar aa gaye hain, bahut badhiya.',
+    },
+    journey: {
+      title: 'Aapka safar',
+      youAreHere: 'Aap yahan hain',
+      done: 'Ho gaya',
+      weekOne: 'Week {n}',
+      weekRange: 'Week {from} se {to}',
+      weekFrom: 'Week {n} ke baad',
+      startedOn: '{date} ko shuru kiya',
+      steps: {
+        start: 'Shuruaat',
+        'shed-window': 'Shedding ka samay',
+        settling: 'Shedding thamne ka samay',
+        'early-signs': 'Shuruaati sanket',
+        'checkpoint-1': 'Checkpoint 1',
+        'visible-change': 'Dikhne wala badlav',
+        'checkpoint-2': 'Checkpoint 2',
+        maintenance: 'Maintenance',
+      },
     },
     wizard: {
       step: 'Step {a} / {b}',
@@ -249,8 +348,6 @@ export const hinglish: Content = {
     checkpoint: {
       intro: 'Week 12 aur 24 aapke honest pal hain. Kuch chhote sawal, sheeshe mein ek fair nazar, aur seedha jawab.',
       start: 'Checkpoint shuru karein',
-      earlyNote: 'Abhi aap week 12 ya 24 par nahi hain. Aap early jhalak le sakte hain, par ye sirf andaza hai.',
-      notSaved: 'Ye early jhalak aapki checkpoint history ya doctor summary mein save nahi hoti. Chalte rahein aur week 12 par dobara dekhein.',
       submit: 'Mera jawab dikhao',
       needAll: 'Aage badhne ke liye har sawal ka jawab dein.',
       historyTitle: 'Aapke pichhle checkpoints',
@@ -258,6 +355,14 @@ export const hinglish: Content = {
       retake: 'Dobara karein',
       weekLabel: 'Checkpoint week',
       questionsTitle: 'Kuch honest sawal',
+      whyTitle: 'Ye result kyun',
+      nextCheck: 'checkpoint {n}',
+      selfCheck: 'self-check',
+      tooEarlyNormal: 'Week {week} par kya normal hai',
+      baselineTitle: 'Abhi baseline photos lein',
+      lookTitle: 'Fair nazar kaise daalein',
+      retakeLook: 'Check dobara karein',
+      historyNext: 'Agla check',
     },
     slipped: {
       intro: 'Kuch din chhoot gaye? Lagbhag sabke saath hota hai. Bataiye kitne din, aur ek shaant, practical agla kadam payein.',
@@ -286,13 +391,27 @@ export const hinglish: Content = {
       aboutBody:
         'Kab Tak? ek independent concept hai jo dikhata hai ki hair journey ka saathi kaisa ho sakta hai. Ye official Man Matters product nahi hai aur medical salah bhi nahi hai. Man Matters ka naam aur logo unke maalikon ke hain.',
       alongside:
-        'Kab Tak? ko Man Matters app aur uske doctor consult ke saath istemaal karne ke liye socha gaya hai. Routine ke liye app, aur aapke week par kya expect karein, uske liye ye. Independent concept hai, official taur par juda nahi.',
+        'Kab Tak? ko Man Matters app aur uske doctor consult ke saath istemaal karne ke liye socha gaya hai. Routine ke liye app, aur aapke week par kya expect karein, uske liye ye.',
       reviewTitle: 'Medical review',
+      theme: 'Dikhawat',
+      themeOptions: { light: 'Light', dark: 'Dark', system: 'System' },
+      appTitle: 'App',
+      projectTitle: 'Is project ke baare mein',
+      projectBody:
+        'Mosaic Wellness Fellowship Builder Challenge ke Part 2 ke liye banaya gaya. Man Matters hair-loss users ke baare mein customer baatcheet se ek kami dikhi: apne week par kya normal hai, aur routine kaam kar rahi hai ya nahi, ye jaanne ka koi tareeka nahi. Kab Tak? dono ka jawab phone par deta hai, bina sign-up ke.',
+      builtBy: '{name} ne banaya, {college}.',
+      emailLabel: 'Email',
+      phoneLabel: 'Phone',
       confirm: 'Haan, sab hata do',
       cancel: 'Mera data rehne do',
       cleared: 'Sab saaf. Aap wapas shuruaat par hain.',
     },
-    footer: { line: 'Ek dostana concept, timeline ke baare mein sach bolne ke liye.' },
+    footer: {
+      disclaimer: 'Ek independent concept, official Man Matters product ya medical salah nahi.',
+      alongside: 'Ise Man Matters app aur doctor consult ke saath istemaal karein.',
+      credit: '{name} ({college}) ne Mosaic Wellness Fellowship Builder Challenge ke liye banaya.',
+      about: 'About',
+    },
     share: {
       open: 'Mera week share karein',
       title: 'Mera Week card',

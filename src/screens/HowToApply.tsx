@@ -6,7 +6,7 @@ export function HowToApply() {
   const items = [t.ui.apply.first, ...h.steps];
   const done = items.filter((_, i) => data.routineTicks[`step-${i}`]).length;
   return (
-    <section className="card" aria-labelledby="apply-title">
+    <section className="card narrow" aria-labelledby="apply-title">
       <h1 id="apply-title">{h.title}</h1>
       <p className="lead">{h.intro}</p>
       <p className="muted" aria-live="polite">{fill(t.ui.apply.progress, { done, total: items.length })}</p>

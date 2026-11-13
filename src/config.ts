@@ -19,6 +19,20 @@ export const SITE_URL = 'https://manmatters.com';
 
 export const STORAGE_KEY = 'kabtak.v1';
 export const STORAGE_VERSION = 1;
+// Theme preference lives in its own key so index.html can read it before first paint.
+// Keep in sync with the inline script in index.html.
+export const THEME_KEY = 'kabtak.theme';
+export const THEME_COLORS = { light: '#143461', dark: '#0B1B33' } as const;
+
+// Builder credit (Mosaic Wellness Fellowship Builder Challenge).
+export const BUILDER = {
+  name: 'Devansh Srivastava',
+  college: 'Kirori Mal College, University of Delhi',
+  collegeShort: 'Kirori Mal College, DU',
+  email: 'devanshsrivastava.reads@gmail.com',
+  phone: '+918736956764',
+  phoneDisplay: '+91 8736956764',
+} as const;
 
 // Official Man Matters wordmark, unmodified copy of
 // https://i.mscwlns.co/media/misc/others/Manmatters%20Logo_egs4fo.png (800x217).

@@ -6,10 +6,10 @@ export const en: Content = {
   app: {
     name: 'Kab Tak?',
     tagline: 'Your hair progress, told honestly.',
-    marketingLines: [
-      'Is this normal for my week? Find out.',
-      'No miracle claims. Just a realistic timeline.',
-      'Know when to wait and when to ask a doctor.',
+    features: [
+      { title: 'Is this normal?', body: 'What is commonly reported at your exact week.' },
+      { title: 'Kab tak?', body: 'Your next milestone, with a real date.' },
+      { title: 'Is it working?', body: 'A straight answer at weeks 12 and 24.' },
     ],
     conceptDisclaimer: 'Independent concept, not an official Man Matters product.',
     reviewPending: 'Content pending medical review.',
@@ -29,7 +29,7 @@ export const en: Content = {
   },
   phases: {
     'settling-in': {
-      title: 'Settling in',
+      title: 'Shed window',
       body: 'Weeks 1 to 4. Some people commonly report extra shedding as hair cycles reset. It can feel scary, and it is often part of the process. Keep going and keep a note of how it looks.',
     },
     'shed-settling': {
@@ -74,6 +74,19 @@ export const en: Content = {
       dizziness: 'Dizziness',
       chest: 'Chest symptoms such as pain or a fast heartbeat',
       severeIrritation: 'Severe scalp irritation, burning or rash',
+    },
+    actions: {
+      'doctor-now': 'Stop using the product today and talk to a doctor.',
+      'see-doctor-soon': 'Book a doctor consult this week.',
+      'commonly-reported': 'Keep your routine exactly as it is. Do not add or stop anything.',
+      'unusual-for-week': 'Book a doctor consult this week to find the cause.',
+    },
+    kabTak: {
+      now: 'Now. Do not wait this out.',
+      consult: 'Do not wait for it to settle. Talk to a doctor this week.',
+      settles: 'Extra shedding is commonly reported to ease off between weeks {from} and {to}. Check again on {date} ({when}).',
+      settlesBy: 'Extra shedding is commonly reported to ease off by week {to}. Check again on {date} ({when}).',
+      watch: 'You are past the usual shed window, so check again on {date} ({when}). If it has not eased by then, talk to a doctor.',
     },
     outcomes: {
       'doctor-now': {
@@ -125,20 +138,72 @@ export const en: Content = {
     },
     answers: { yes: 'Yes', no: 'No', unsure: 'Not sure' },
     results: {
-      responding: {
-        title: 'Looks like you are responding',
-        body: 'Several signs point the right way. Keep going and check again at the next checkpoint.',
+      'on-track': {
+        title: 'On track',
+        body: 'The signs commonly reported by this checkpoint are there.',
+        action: 'Keep your routine exactly as it is.',
+        kabTak: 'Next check: {label}, {date} ({when}).',
       },
-      unclear: {
-        title: 'Not clear yet',
-        body: 'The signs are mixed. This is common. Stay consistent and check again, or ask a doctor if you want certainty.',
+      'early-signs': {
+        title: 'Early signs, keep going',
+        body: 'Some positive signs are showing. Visible change commonly takes longer, so this is a good place to be.',
+        action: 'Keep your routine steady and take same-light photos for next time.',
+        kabTak: 'Next check: {label}, {date} ({when}).',
       },
       'not-responding': {
-        title: 'Not responding so far',
-        body: 'You are not seeing the signs commonly reported by now. This is not your fault. Please see a doctor to review your plan.',
+        title: 'Not responding yet, talk to a doctor',
+        body: 'You are not seeing the signs commonly reported by now. This is not your fault. A doctor can review your plan.',
+        action: 'Book a doctor consult and show them your summary.',
+        kabTak: 'Do not wait for another checkpoint. Talk to a doctor this week.',
+      },
+      'fix-routine': {
+        title: 'Fix the routine first',
+        body: 'The check cannot judge a routine that was not followed on most days. No blame, it happens to everyone.',
+        action: 'Restart your routine today and keep it steady.',
+        kabTak: 'Check again on {date} ({when}), after a steady stretch.',
+      },
+      'too-early': {
+        title: 'Too early to judge',
+        body: 'Before week 12, visible change is not commonly expected, so there is nothing fair to judge yet.',
+        action: 'Take your baseline photos now, so checkpoint 1 is a fair comparison.',
+        kabTak: 'Checkpoint 1 is on {date} ({when}).',
+      },
+      'need-better-look': {
+        title: 'Need a better look',
+        body: 'Most of your answers were "Not sure", which usually means the photos are hard to compare.',
+        action: 'Take fair photos with the steps below, then retake the check.',
+        kabTak: 'Retake as soon as you have fair photos, ideally this week.',
       },
     },
-    lowAdherence: 'You missed a lot of days. Fixing the routine first is a good next step. No blame, it happens to everyone.',
+    reasons: {
+      'too-early': 'You are in week {week}. The first fair check is at week 12.',
+      'low-adherence': 'You said the routine was not followed on most days.',
+      'mostly-unsure': 'You were not sure about most of the signs.',
+      'w12-shed-and-visible': 'You said yes to: {yes}. At week 12 that is more than is commonly expected.',
+      'w12-shed-only': 'You said yes to: {yes}. That is the main sign at week 12. Visible fill-in commonly comes later.',
+      'w12-visible-only': 'You said yes to: {yes}. Shedding is not lower yet, so keep watching it.',
+      'w12-new-thinning': 'You said yes to: {yes}, and you also noticed new thinning, which is worth a doctor\'s look.',
+      'w24-visible': 'You said yes to: {yes}. Visible change is what counts at week 24.',
+      'w24-partial': 'You said yes to: {yes}. By week 24, more visible change is commonly reported.',
+      'w24-new-thinning': 'You noticed new thinning areas. At week 24 that is a reason to see a doctor.',
+      'no-positive': 'After a steady routine, none of the signs were a yes.',
+    },
+    signNames: {
+      lessShedding: 'Less shedding',
+      fillIn: 'Filling in',
+      thicker: 'Feels thicker',
+      consistentUse: 'Routine followed',
+      photoBetter: 'Photos look better',
+      newThinning: 'New thinning',
+    },
+    roles: { main: 'Main sign', bonus: 'Bonus', routine: 'Routine', warning: 'Warning sign' },
+    effects: { positive: 'Counted', negative: 'Against', neutral: 'Not counted' },
+    lookSteps: [
+      'Take two photos today: top of the head and the hairline',
+      'Use the same room, light and distance as your baseline',
+      'Keep hair dry and parted the same way',
+      'Put them side by side with your baseline, then answer again',
+    ],
     consultCta: 'Talk to a doctor',
     doctorSummaryTitle: 'Summary to show your doctor',
   },
@@ -147,6 +212,18 @@ export const en: Content = {
     question: 'How many days did you skip?',
     lapseVsPlateau:
       'A lapse means you stopped the routine. A plateau means you kept going and nothing seems to change. They need different responses.',
+    actions: {
+      'short-gap': 'Restart today. Do not double up.',
+      'lapse-reset-expectations': 'Restart today and follow the product label or your doctor for how to restart.',
+      'long-gap-consult': 'Talk to a doctor before you restart.',
+    },
+    kabTak: {
+      'short-gap': 'A gap this short is commonly reported to make little difference. {milestone} stays on {date} ({when}).',
+      'lapse-reset-expectations': 'Your timeline commonly moves later by about the length of the gap, roughly {shift} weeks. Expect {milestone} around {date} ({when}).',
+      'lapse-reset-one': 'Your timeline commonly moves later by about the length of the gap, roughly 1 week. Expect {milestone} around {date} ({when}).',
+      'long-gap-consult': 'Talk to a doctor this week, before restarting.',
+      nextCheckGeneric: 'Your next self-check',
+    },
     outcomes: {
       'short-gap': {
         title: 'Small gap, carry on',
@@ -193,7 +270,10 @@ export const en: Content = {
   },
   ui: {
     nav: { week: 'Your week', shed: 'Shed check', checkpoint: 'Checkpoint', slipped: 'I slipped', apply: 'How to apply', label: 'Main sections' },
-    header: { settings: 'Settings', conceptPill: 'Independent concept', langLabel: 'Language', skip: 'Skip to content' },
+    header: { settings: 'Settings', conceptPill: 'Concept', conceptPillLabel: 'Independent concept. About this project', langLabel: 'Language', skip: 'Skip to content', themeLabel: 'Theme' },
+    when: { today: 'today', thisWeek: 'this week', inOne: 'in 1 week', inN: 'in {n} weeks', dateLocale: 'en-IN' },
+    kabTakLabel: 'Kab tak?',
+    doNowLabel: 'Do this now',
     onboarding: {
       title: 'When did you start?',
       lead: 'Pick your start date and see exactly where you are on the timeline. No sign-up. No photos. Just your week, told honestly.',
@@ -213,12 +293,11 @@ export const en: Content = {
       label: 'Week',
       phaseLabel: 'Where you are',
       timelineLabel: 'Your 24 week timeline',
-      spikeShed: 'Shedding scare',
-      spikeDoubt: 'Is it working? doubt',
-      checkpointMark: 'Checkpoint',
-      nextCheckpoint: 'Checkpoint {n} is in {weeks} weeks',
-      nextCheckpointOne: 'Checkpoint {n} is in 1 week',
+      spikeShed: 'Shedding scare is common here',
+      spikeDoubt: 'Is it working? doubt is common here',
       checkpointToday: 'It is checkpoint week. Time for your honest self-check.',
+      nextLine: 'Next: {name} on {date}, {when}',
+      started: 'Started {date}',
       commonlyTitle: 'Commonly reported at this stage',
       doNowTitle: 'What to do now',
       doNow: [
@@ -233,8 +312,28 @@ export const en: Content = {
         'Anything that worries you. A doctor is a tap away',
       ],
       shedCta: "I'm shedding more",
+      shedCtaHint: 'Quick 3 step check',
       maintenanceHonest: 'Plainly put: stopping is commonly reported to let hair drift back to where it was. Gains are kept by keeping going.',
       beyondTimeline: 'You are past the 24 week mark, nicely done.',
+    },
+    journey: {
+      title: 'Your journey',
+      youAreHere: 'You are here',
+      done: 'Done',
+      weekOne: 'Week {n}',
+      weekRange: 'Weeks {from} to {to}',
+      weekFrom: 'Week {n} onwards',
+      startedOn: 'Started {date}',
+      steps: {
+        start: 'Start',
+        'shed-window': 'Shed window',
+        settling: 'Shed settling',
+        'early-signs': 'Early signs',
+        'checkpoint-1': 'Checkpoint 1',
+        'visible-change': 'Visible change',
+        'checkpoint-2': 'Checkpoint 2',
+        maintenance: 'Maintenance',
+      },
     },
     wizard: {
       step: 'Step {a} of {b}',
@@ -249,8 +348,6 @@ export const en: Content = {
     checkpoint: {
       intro: 'Weeks 12 and 24 are your honest moments. A few quick questions, a fair look in the mirror, and a straight answer.',
       start: 'Start the checkpoint',
-      earlyNote: 'You are not at week 12 or 24 yet. You can still take an early peek, but it is only a rough guide.',
-      notSaved: 'This early peek is not saved to your checkpoint history or doctor summary. Keep going and check again at week 12.',
       submit: 'Get my answer',
       needAll: 'Answer every question to continue.',
       historyTitle: 'Your past checkpoints',
@@ -258,6 +355,14 @@ export const en: Content = {
       retake: 'Take it again',
       weekLabel: 'Checkpoint week',
       questionsTitle: 'A few honest questions',
+      whyTitle: 'Why this result',
+      nextCheck: 'checkpoint {n}',
+      selfCheck: 'self-check',
+      tooEarlyNormal: 'What is normal at week {week}',
+      baselineTitle: 'Take your baseline photos now',
+      lookTitle: 'How to get a fair look',
+      retakeLook: 'Retake the check',
+      historyNext: 'Next check',
     },
     slipped: {
       intro: 'Missed some days? It happens to almost everyone. Tell us how long and get a calm, practical next step.',
@@ -286,13 +391,27 @@ export const en: Content = {
       aboutBody:
         'Kab Tak? is an independent concept made to show how a hair journey companion could feel. It is not an official Man Matters product and it is not medical advice. The Man Matters name and logo belong to their owners.',
       alongside:
-        'Kab Tak? is meant to sit alongside the Man Matters app and its doctor consult. Use the app for your routine, and this for what to expect at your week. Independent concept, not affiliated.',
+        'Kab Tak? is meant to sit alongside the Man Matters app and its doctor consult. Use the app for your routine, and this for what to expect at your week.',
       reviewTitle: 'Medical review',
+      theme: 'Appearance',
+      themeOptions: { light: 'Light', dark: 'Dark', system: 'System' },
+      appTitle: 'App',
+      projectTitle: 'About this project',
+      projectBody:
+        'Built for Part 2 of the Mosaic Wellness Fellowship Builder Challenge. Customer conversations about Man Matters hair-loss users showed one gap: no way to know what is normal for your week, or whether the routine is working. Kab Tak? answers both, on the phone, with nothing to sign up for.',
+      builtBy: 'Built by {name}, {college}.',
+      emailLabel: 'Email',
+      phoneLabel: 'Phone',
       confirm: 'Yes, clear everything',
       cancel: 'Keep my data',
       cleared: 'All clear. You are back at the start.',
     },
-    footer: { line: 'A friendly concept, built to be honest about timelines.' },
+    footer: {
+      disclaimer: 'An independent concept, not an official Man Matters product or medical advice.',
+      alongside: 'Use it alongside the Man Matters app and doctor consult.',
+      credit: 'Built by {name} ({college}) for the Mosaic Wellness Fellowship Builder Challenge.',
+      about: 'About',
+    },
     share: {
       open: 'Share my week',
       title: 'My Week card',

@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { DateError, daysSince } from '../engine/phases';
 import { isoDaysAgo, todayISO, useApp } from '../state/AppState';
+import { Icon } from '../components/NavIcon';
 
-export function Onboarding({ onDone, initial }: { onDone?: () => void; initial?: string }) {
+const FEATURE_ICONS = ['info', 'calendar', 'checkpoint'];
+
+export function Onboarding({ onDone, initial, showFeatures }: { onDone?: () => void; initial?: string; showFeatures?: boolean }) {
   const { t, setStartDate } = useApp();
   const o = t.ui.onboarding;
   const [value, setValue] = useState(initial ?? '');
@@ -34,11 +37,15 @@ export function Onboarding({ onDone, initial }: { onDone?: () => void; initial?:
     [o.chips.threeMonthsAgo, 90],
   ];
 
-  return (
-    <section className="card onboarding" aria-labelledby="ob-title">
-      <p className="eyebrow">{t.app.tagline}</p>
-      <h1 id="ob-title">{o.title}</h1>
-      <p className="lead">{o.lead}</p>
+  const card = (
+    <section className={`card onboarding ${showFeatures ? 'onboarding-hero' : ''}`} aria-labelledby={showFeatures ? 'ob-title' : undefined}>
+      {showFeatures && (
+        <>
+          <p className="eyebrow">{t.app.tagline}</p>
+          <h1 id="ob-title">{o.title}</h1>
+          <p className="lead">{o.lead}</p>
+        </>
+      )}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -77,7 +84,7 @@ export function Onboarding({ onDone, initial }: { onDone?: () => void; initial?:
         <p id="start-error" className="error" role="alert">
           {error}
         </p>
-        <button type="submit" className="btn btn-primary btn-block">
+        <button type="submit" className="btn btn-primary btn-block btn-lg">
           {o.start}
         </button>
         <button
@@ -89,5 +96,23 @@ export function Onboarding({ onDone, initial }: { onDone?: () => void; initial?:
         </button>
       </form>
     </section>
+  );
+
+  if (!showFeatures) return card;
+  return (
+    <div className="onboarding-wrap">
+      {card}
+      <ul className="features" aria-label={t.app.tagline}>
+        {t.app.features.map((f, i) => (
+          <li key={f.title} className="feature">
+            <span className="feature-ico" aria-hidden="true"><Icon name={FEATURE_ICONS[i] ?? 'info'} size={20} /></span>
+            <span>
+              <strong>{f.title}</strong>
+              <span className="feature-body">{f.body}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

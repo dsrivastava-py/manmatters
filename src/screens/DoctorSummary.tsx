@@ -11,11 +11,11 @@ export function DoctorSummary({ go }: { go: (r: string) => void }) {
   const shed = data.lastShedCheck;
 
   return (
-    <div className="stack">
+    <div className="stack narrow">
       <article className="card doctor-sheet" aria-labelledby="doc-title">
         <div className="print-brand">
           <img src={LOGO} alt="Man Matters" className="print-logo" />
-          <span>{t.ui.header.conceptPill}</span>
+          <span>{t.app.conceptDisclaimer}</span>
         </div>
         <h1 id="doc-title">{d.title}</h1>
         <dl className="facts">

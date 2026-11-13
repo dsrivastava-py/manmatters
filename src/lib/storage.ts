@@ -1,4 +1,5 @@
 import { STORAGE_KEY, STORAGE_VERSION } from '../config';
+import { CHECKPOINT_RESULTS, scoreCheckpoint } from '../engine/checkpoint';
 import type { CheckpointAnswers, CheckpointResult } from '../engine/checkpoint';
 import type { ShedOutcome } from '../engine/shedCheck';
 
@@ -45,7 +46,9 @@ const isObj = (v: unknown): v is Record<string, unknown> =>
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const ANSWERS = ['yes', 'no', 'unsure'];
 const Q_IDS = ['lessShedding', 'fillIn', 'thicker', 'consistentUse', 'photoBetter', 'newThinning'];
-const RESULTS = ['responding', 'unclear', 'not-responding'];
+/** Results saved before the week-aware checkpoint. They are re-scored from the saved answers on load. */
+const LEGACY_RESULTS = ['responding', 'unclear'];
+const RESULTS: readonly string[] = [...CHECKPOINT_RESULTS, ...LEGACY_RESULTS];
 const OUTCOMES = ['doctor-now', 'see-doctor-soon', 'commonly-reported', 'unusual-for-week'];
 
 function validCheckpoint(c: unknown): c is StoredCheckpoint {
@@ -78,7 +81,13 @@ export function validate(raw: unknown): AppData | null {
   if (raw.lastShedCheck !== null && !validShed(raw.lastShedCheck)) return null;
   if (typeof raw.onboardingSeen !== 'boolean') return null;
   if (!isObj(raw.routineTicks) || !Object.values(raw.routineTicks).every((v) => typeof v === 'boolean')) return null;
-  return raw as unknown as AppData;
+  const data = raw as unknown as AppData;
+  return {
+    ...data,
+    checkpoints: data.checkpoints.map((c) =>
+      LEGACY_RESULTS.includes(c.result) ? { ...c, result: scoreCheckpoint(c.answers, c.week).result } : c,
+    ),
+  };
 }
 
 let memory: AppData | null = null;

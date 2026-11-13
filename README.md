@@ -2,20 +2,103 @@
 
 An independent concept, not an official Man Matters product. An offline-first, no-login PWA that helps hair-loss users judge whether what they see is commonly reported for their week.
 
+## Mosaic Wellness Fellowship Builder Challenge submission
+
+### Builder
+
+- **Name:** Devansh Srivastava
+- **College:** Kirori Mal College, University of Delhi
+- **Email:** devanshsrivastava.reads@gmail.com
+- **Phone:** +91 8736956764
+
+### Brand
+
+Man Matters (Mosaic Wellness), hair-loss users.
+
+### Problem statement
+
+Hair-loss routines take months to show results. Users see more shedding in the first weeks, then doubt around weeks 8 to 12, and have no way to tell whether what they see is normal for their week or whether the routine is working. The fear leads to quitting early or to repeated "is this normal?" questions to support and doctors.
+
+### Short explanation (about 130 words)
+
+Kab Tak? ("How long?") is a no-login, offline web app that sits alongside the Man Matters app and doctor consult. The user enters one date, the day they started their routine. The app then answers the five questions users actually ask: where am I, is this normal for my week, when will it change (with a real calendar date for the next milestone), is it working, and what do I do now. A three-step shed check separates commonly reported shedding from red flags that need a doctor. Week-12 and week-24 checkpoints give a clear verdict (on track, early signs, fix the routine first, not responding yet, or too early) with the reasons and the next date. Clear cases go straight to the Man Matters doctor consult. Nothing leaves the phone.
+
+### Key features mapped to the problem
+
+| User question | Feature |
+| --- | --- |
+| Where am I? | Your Week: week number, phase, journey timeline with "you are here" |
+| Is this normal for my week? | Commonly reported card per phase; Shed check (3 steps, red flags override) |
+| Kab tak? When will it change? | Next milestone with date and "in N weeks" on Your Week; a "Kab tak?" line on every shed check, slipped and checkpoint result |
+| Is it working? | Week-aware checkpoints at weeks 12 and 24 with a "why this result" breakdown |
+| What do I do now? | One "Do this now" action on every result; consult link for doctor cases; 112 only for chest symptoms and swelling |
+| I missed days | I slipped: lapse vs plateau, how much the timeline moves |
+| Talk to my doctor | Printable doctor summary and a shareable My Week card (no personal data) |
+
+### Main flow for reviewers
+
+Live link: https://dsrivastava-py.github.io/manmatters/
+
+1. Open the link on a phone (or a narrow browser window). Tap **1 month ago** on the start screen.
+2. **Your Week** shows week 5, the phase, the journey timeline and the next milestone with its date.
+3. Tap **I'm shedding more**, keep the week, pick **A bit more than usual**, then **See my result**. Read the "Kab tak?" line.
+4. Go back and run it again, ticking **Chest symptoms** in step 3, to see the emergency path (112) and the consult link.
+5. Open **Checkpoint**. Before week 12 it shows "Too early to judge" with the checkpoint 1 date. To see a verdict, open Settings, **Change start date**, pick a date about 12 weeks ago, then answer the questions (try "Yes" only for less shedding).
+6. Open **I slipped** and tap **10 days**.
+7. Switch to **Hinglish** in the app bar, and try Light, Dark or System under **Settings > Appearance**.
+8. From Your Week, open **Summary for my doctor** and **Share my week**.
+
+### AI tools used
+
+- **Kiro agent (with Claude models)** for planning, writing the code and tests, reviewing and visual checks.
+- **ChatGPT, Gemini and Perplexity style tools** for secondary research on the brand, the existing Man Matters app and user discussions (see Positioning & research; every finding is marked verified or not).
+
+### Privacy
+
+No customer data is in the app or in this repo: no customer names, numbers or quotes. The app stores only the user's own start date, language, theme and check results in localStorage on their device.
+
+### Still to add (placeholders, not filled in)
+
+- **Part 1 document link:** `TODO: add link`
+- **Customer conversation summary:** `TODO: add summary (no names or phone numbers)`
+- **Demo video link:** `TODO: add link`
+
 ## What and why
 
 Hair routines take months to show results, and the hardest moments are the early shed and the "is this working?" doubt around weeks 8 to 12. Most tools are loggers: they ask users to record things and give little back. Kab Tak? is an **interpreter, not a logger**. The user enters one date, and the app tells them what is commonly reported at their exact week, what to do now, what to watch for, and when to talk to a doctor. It is honest when something may not be working.
 
 ## Screens
 
-- **Your Week**: week number, phase, timeline with the two panic spikes and checkpoints at weeks 12 and 24, commonly reported guidance, month 6+ maintenance card.
-- **Shed check**: 3-step triage with a "stop and consult a doctor" exit for red flags.
-- **Checkpoint**: same-light, same-angle self-check at weeks 12 and 24, scored responding / unclear / not responding. No photo uploads.
-- **I slipped**: missed-routine guidance (short gap, lapse, long gap).
+- **Your Week**: week number, phase, a "Kab tak?" line with the next milestone date, a journey timeline (start, shed window, settling, early signs, checkpoint 12, visible change, checkpoint 24, maintenance) with "you are here", commonly reported guidance, month 6+ maintenance card. A floating "I'm shedding more" button sits above the bottom nav.
+- **Shed check**: 3-step triage with a "stop and consult a doctor" exit for red flags. Every result has one "Do this now" action and a "Kab tak?" line (when it commonly eases, the date to check again).
+- **Checkpoint**: same-light, same-angle self-check at weeks 12 and 24 with a clear verdict, reason, action and next date (rules below). No photo uploads.
+- **I slipped**: missed-routine guidance (short gap, lapse, long gap), with how far the next milestone moves.
 - **How to apply**: tickable checklist with no quantities. Follows the product label or the doctor's instructions.
 - **Share my week**: a "My Week" PNG card drawn on a canvas on the device. Uses the Web Share API with files where supported, otherwise downloads the PNG. No name, phone or personal data on the card.
 - **Summary for my doctor**: printable one-page checkpoint summary (print stylesheet, "Print or save as PDF"). It states it is a self-report, not a diagnosis.
-- **Settings and About**: language (English / Roman Hinglish), start date, clear all data, concept disclosure.
+- **Settings and About**: language (English / Roman Hinglish), appearance (light, dark, system), start date, offline and install status, clear all data, concept disclosure, medical review status, and "About this project" with builder contact.
+
+### Checkpoint rules (`src/engine/checkpoint.ts`)
+
+Applied in order. Thresholds are named constants in the engine and need clinical sign-off.
+
+1. Before week 12: **Too early to judge** (no questions), shows what is normal now and the checkpoint 1 date.
+2. Routine not followed on most days: **Fix the routine first**, recheck in `FIX_ROUTINE_RECHECK_WEEKS` (8), consult offered.
+3. At least `NEED_LOOK_MIN_UNSURE` (3 of 4) signs "Not sure": **Need a better look**, photo steps and retake.
+4. Week 12 rules (weeks 12 to 23). Main sign: less shedding; visible change is a bonus and a "No" there is not held against the user.
+   - Less shedding plus at least `ON_TRACK_MIN_VISIBLE_W12` (1) visible sign, no new thinning: **On track**, next: week 24.
+   - Less shedding or a visible sign: **Early signs, keep going**, next: week 24 (consult offered if new thinning).
+5. Week 24 rules (week 24 onwards). Main signs: fill-in, thicker, photo better.
+   - New thinning: **Not responding yet, talk to a doctor**.
+   - At least `ON_TRACK_MIN_VISIBLE_W24` (2) visible signs: **On track**, next self-check in `MAINTENANCE_RECHECK_WEEKS` (12).
+   - One visible sign or less shedding: **Early signs, keep going**, recheck in `PARTIAL_RECHECK_WEEKS_W24` (8), consult offered.
+6. No "Yes" at all: **Not responding yet** when at most `NOT_RESPONDING_MAX_UNSURE` (1) answer is "Not sure", otherwise **Need a better look**.
+
+Results saved by the old scoring ("responding", "unclear") are re-scored from their saved answers on load.
+
+### Theme
+
+Light, dark or system (default). The choice is stored under `kabtak.theme`; a small inline script in `index.html` applies `data-theme` on `<html>` before first paint. Colours are CSS variables in `src/styles/tokens.css`. The official logo always sits on a white plate so it stays legible on dark. The share card PNG and the printable doctor summary stay light.
 
 ## Run, test, build, preview
 
@@ -24,7 +107,7 @@ Hair routines take months to show results, and the hardest moments are the early
 - `npm test` unit and component tests (Vitest)
 - `npm run build` type-check and produce `dist/` (includes `manifest.webmanifest`, `sw.js`)
 - `npm run preview` serve `dist/` locally; the service worker precaches all assets so the app works fully offline after the first load
-- `node scripts/make-icons.mjs` regenerates `public/icons/*` (navy #143461 with a yellow #FDDC69 "KT" monogram, 192, 512, maskable 512, apple touch)
+- `node scripts/make-icons.mjs` regenerates `public/icons/*` (the official logo on white, 192, 512, maskable 512, apple touch; needs Playwright)
 
 ## Deploy
 
@@ -54,7 +137,7 @@ Everything stays on the device in localStorage (start date, language, checkpoint
 - Colours: #143461 navy (most used, text and CTA), #225396 blue, #F2F7FC pale surface, #FDDC69 yellow accent, neutrals #FFFFFF #F5F5F5 #E3E3E3 #C6C6C6 #9E9E9E #666666 #212121 #101828. **Verified**: these hex values appear in the site CSS, ranked by frequency. **Inferred**: which token plays which role (button, text, surface); there is no style guide.
 - Font: **MiSansLatin**, the official Man Matters typeface (site CSS variable `--athena-font-family: MiSansLatin, Inter`). Self-hosted in `public/fonts/MiSansLatin/` from `https://s.mscwlns.co/rcl/p/365/public/static/fonts/MiSansLatin/MiSansLatin-{Medium,Semibold,Bold}.woff2`, the three files manmatters.com loads. `src/styles/tokens.css` reproduces the site's `@font-face` mapping exactly (Medium for weights 300-400, Semibold for 500-550, Bold for 600-700, `font-display: swap`). The files are precached by the service worker, so the font works offline. Fallback stack: `system-ui, -apple-system, Segoe UI, Roboto, sans-serif`. Inter is no longer used. The share-card canvas waits for `document.fonts.load` on the three weights before drawing, and the print summary uses the same CSS font.
 - Logo: the official wordmark `https://i.mscwlns.co/media/misc/others/Manmatters%20Logo_egs4fo.png` (800x217 PNG, the same file the site header and footer use), byte-identical copy in `public/brand/logo.png`. It is never recoloured, cropped or stretched: sizes are set by height with width `auto`, and it sits on white with clear space. Used in the app header, the share card (on a white plate, since its blue is not legible on navy), the printable doctor summary header, and all app/PWA icons (`public/icons/*`, generated by `scripts/make-icons.mjs`, which needs Playwright installed). The maskable icon keeps the logo inside the 80 percent safe zone. The site's own favicon (`apple-touch-icon_flwcl4.png`) is only 180px native, so it was not used.
-- Rights: the author confirmed they may use the official logo and font for this Man Matters submission. The app is still labelled "Concept, not an official Man Matters product" in the header, About sheet, share card and doctor summary.
+- Rights: the author confirmed they may use the official logo and font for this Man Matters submission. The app is still labelled "Concept, not an official Man Matters product" with a "Concept" pill in the app bar, once in the footer, and in the About sheet, share card and doctor summary.
 - Tone is taken from the site copy: doctor-led, realistic timelines, "outcomes vary by individual".
 
 ## LINKS
@@ -71,12 +154,13 @@ Everything stays on the device in localStorage (start date, language, checkpoint
 1. Phase timelines and "commonly reported" statements per week (early shed, settling, early signs, building, maintenance).
 2. Shed-check triage rules and thresholds (which week and amount lead to see a doctor soon or unusual for week).
 3. Red-flag list (swelling, dizziness, chest symptoms, severe irritation) and the stop-and-consult wording.
-4. Checkpoint questions, scoring rules, and the 80 percent consistency cut-off at weeks 12 and 24.
-5. Slipped-routine guidance and gap thresholds (short gap, lapse, long gap).
+4. Checkpoint questions, the week-aware scoring rules and constants, recheck intervals, and the "followed on most days" routine question.
+5. Slipped-routine guidance, gap thresholds (short gap, lapse, long gap) and how far the timeline moves.
 6. Month 6+ maintenance statements, including what happens when a routine is stopped.
 7. How-to-apply checklist wording (must stay free of quantities).
 8. Doctor summary wording and disclaimers.
 9. Hinglish translations of all of the above.
+10. "Kab tak?" lines: shed easing window (weeks 5 to 8), 2 week recheck, and next-milestone dates.
 
 ## OPEN QUESTIONS for the Man Matters team
 
@@ -84,7 +168,7 @@ Everything stays on the device in localStorage (start date, language, checkpoint
 - Confirm the logo, name, brand colours and MiSansLatin may be used in this concept beyond the submission.
 - Which clinician owns sign-off of the clinical content, and should timelines differ by product or concern (hair fall, thinning, receding, dandruff-related shedding)?
 - Should checkpoint results be shareable with a doctor inside the consult flow instead of a printed summary?
-- Is the checkpoint rule right? "Not responding" needs at most 1 positive sign of 4 and fewer than 2 "Not sure" answers, and is never shown before week 12. A clinician should confirm these thresholds.
+- Are the checkpoint rules right (see Checkpoint rules)? "Not responding" needs zero positive signs and at most one "Not sure" after consistent use, or new thinning at week 24, and is never shown before week 12. A clinician should confirm these thresholds.
 - Preferred Hinglish tone and wording review.
 
 Note: check the real Man Matters app's existing habit and photo tracker first, to avoid duplicating features. This concept deliberately does not track photos.
@@ -114,7 +198,7 @@ The research below came from a secondary AI tool. **Verify every link and claim 
 
 1. On-demand "is this normal for my week?" answer, self-serve, no callback wait.
 2. Lapse vs plateau explainer (why a skipped stretch can show up as delayed shedding weeks later).
-3. Honest week 12 and 24 checkpoints with a "not responding, talk to a doctor" exit (`NOT_RESPONDING_MAX_SCORE` in `src/engine/checkpoint.ts`: one or fewer positive signs).
+3. Honest week 12 and 24 checkpoints with a "not responding, talk to a doctor" exit (`NOT_RESPONDING_MAX_YES` and `NOT_RESPONDING_MAX_UNSURE` in `src/engine/checkpoint.ts`).
 
 ### Overlap risk
 

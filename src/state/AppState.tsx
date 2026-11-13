@@ -5,6 +5,8 @@ import type { AppData } from '../lib/storage';
 import { getContent } from '../content';
 import type { Content, Lang } from '../content';
 import { weekFromStartDate } from '../engine/phases';
+import { applyTheme, readThemePref, resolveTheme, writeThemePref } from '../lib/theme';
+import type { Theme, ThemePref } from '../lib/theme';
 
 export function todayISO(d: Date = new Date()): string {
   const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -27,6 +29,9 @@ interface Ctx {
   setStartDate: (iso: string) => void;
   patch: (p: Partial<AppData>) => void;
   clearAll: () => void;
+  themePref: ThemePref;
+  theme: Theme;
+  setThemePref: (p: ThemePref) => void;
 }
 
 const AppCtx = createContext<Ctx | null>(null);
@@ -37,7 +42,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const patch = useCallback((p: Partial<AppData>) => setData(updateData(p)), []);
   const setLang = useCallback((language: Lang) => patch({ language }), [patch]);
   const setStartDate = useCallback((startDate: string) => patch({ startDate, onboardingSeen: true }), [patch]);
-  const clearAll = useCallback(() => setData(clearAllData()), []);
+  const [themePref, setPref] = useState<ThemePref>(() => readThemePref());
+  const [theme, setTheme] = useState<Theme>(() => resolveTheme(readThemePref()));
+  const setThemePref = useCallback((p: ThemePref) => {
+    writeThemePref(p);
+    setPref(p);
+  }, []);
+  const clearAll = useCallback(() => {
+    setData(clearAllData());
+    setThemePref('system');
+  }, [setThemePref]);
+
+  useEffect(() => {
+    const update = () => setTheme(resolveTheme(themePref));
+    update();
+    if (themePref !== 'system') return;
+    const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
+    mq?.addEventListener?.('change', update);
+    return () => mq?.removeEventListener?.('change', update);
+  }, [themePref]);
+
+  useEffect(() => applyTheme(theme), [theme]);
 
   useEffect(() => {
     document.documentElement.lang = data.language === 'en' ? 'en' : 'hi-Latn';
@@ -61,6 +86,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setStartDate,
     patch,
     clearAll,
+    themePref,
+    theme,
+    setThemePref,
   };
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

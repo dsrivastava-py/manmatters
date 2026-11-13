@@ -1,34 +1,62 @@
 import { useState } from 'react';
-import { CONSENT_URL, PRIVACY_URL } from '../config';
+import { BUILDER, CONSENT_URL, PRIVACY_URL } from '../config';
 import { Sheet } from './Sheet';
 import { ReviewNote } from './Reviewed';
+import { PwaBar } from './Pwa';
+import { Icon } from './NavIcon';
 import { Onboarding } from '../screens/Onboarding';
-import { useApp } from '../state/AppState';
+import { fill, useApp } from '../state/AppState';
+import { formatDate } from '../lib/when';
+import type { ThemePref } from '../lib/theme';
+
+const THEMES: { id: ThemePref; icon: string }[] = [
+  { id: 'light', icon: 'sun' },
+  { id: 'dark', icon: 'moon' },
+  { id: 'system', icon: 'system' },
+];
 
 export function Settings({ onClose, aboutOnly }: { onClose: () => void; aboutOnly?: boolean }) {
-  const { t, lang, setLang, data, clearAll } = useApp();
+  const { t, lang, setLang, data, clearAll, themePref, setThemePref } = useApp();
   const s = t.ui.settings;
   const [confirming, setConfirming] = useState(false);
   const [changing, setChanging] = useState(false);
-  const [cleared, setCleared] = useState(false);
 
-  return (
-    <Sheet title={aboutOnly ? s.about : s.title} onClose={onClose} closeLabel={s.close}>
-      {cleared && <p role="status">{s.cleared}</p>}
-      <section>
+  const about = (
+    <>
+      <section className="sheet-section">
         <h3>{s.about}</h3>
         <p>{s.aboutBody}</p>
         <p>{s.alongside}</p>
-        <p>{t.app.conceptDisclaimer}</p>
-        <p className="muted">{t.app.medicalDisclaimer}</p>
-        <h3>{s.reviewTitle}</h3>
+        <p className="muted small">{t.app.medicalDisclaimer}</p>
         <ReviewNote />
       </section>
+      <section className="sheet-section">
+        <h3>{s.projectTitle}</h3>
+        <p>{s.projectBody}</p>
+        <p className="small">{fill(s.builtBy, { name: BUILDER.name, college: BUILDER.college })}</p>
+        <ul className="contact">
+          <li>
+            <a href={`mailto:${BUILDER.email}`}>
+              <Icon name="mail" size={18} /> <span className="sr-only">{s.emailLabel}: </span>{BUILDER.email}
+            </a>
+          </li>
+          <li>
+            <a href={`tel:${BUILDER.phone}`}>
+              <Icon name="phone" size={18} /> <span className="sr-only">{s.phoneLabel}: </span>{BUILDER.phoneDisplay}
+            </a>
+          </li>
+        </ul>
+      </section>
+    </>
+  );
+
+  return (
+    <Sheet title={aboutOnly ? s.about : s.title} onClose={onClose} closeLabel={s.close}>
       {!aboutOnly && (
         <>
-          <section>
-            <h3>{s.language}</h3>
-            <div className="seg" role="group" aria-label={s.language}>
+          <section className="sheet-section">
+            <h3 id="set-lang">{s.language}</h3>
+            <div className="seg" role="group" aria-labelledby="set-lang">
               <button type="button" className={`seg-opt ${lang === 'en' ? 'selected' : ''}`} aria-pressed={lang === 'en'} onClick={() => setLang('en')}>
                 English
               </button>
@@ -37,10 +65,27 @@ export function Settings({ onClose, aboutOnly }: { onClose: () => void; aboutOnl
               </button>
             </div>
           </section>
+          <section className="sheet-section">
+            <h3 id="set-theme">{s.theme}</h3>
+            <div className="seg" role="group" aria-labelledby="set-theme">
+              {THEMES.map((th) => (
+                <button
+                  type="button"
+                  key={th.id}
+                  className={`seg-opt ${themePref === th.id ? 'selected' : ''}`}
+                  aria-pressed={themePref === th.id}
+                  onClick={() => setThemePref(th.id)}
+                  data-testid={`theme-${th.id}`}
+                >
+                  <Icon name={th.icon} size={18} /> {s.themeOptions[th.id]}
+                </button>
+              ))}
+            </div>
+          </section>
           {data.startDate && (
-            <section>
+            <section className="sheet-section">
               <h3>{s.startDate}</h3>
-              <p>{data.startDate}</p>
+              <p>{formatDate(data.startDate, t.ui.when.dateLocale)}</p>
               {changing ? (
                 <Onboarding initial={data.startDate} onDone={() => setChanging(false)} />
               ) : (
@@ -50,8 +95,10 @@ export function Settings({ onClose, aboutOnly }: { onClose: () => void; aboutOnl
               )}
             </section>
           )}
-          <section>
-            <p className="muted">{t.app.privacyNote}</p>
+          <section className="sheet-section">
+            <h3>{s.appTitle}</h3>
+            <PwaBar />
+            <p className="muted small">{t.app.privacyNote}</p>
             {confirming ? (
               <div role="alertdialog" aria-label={t.app.clearData}>
                 <p>{t.app.clearDataConfirm}</p>
@@ -61,7 +108,6 @@ export function Settings({ onClose, aboutOnly }: { onClose: () => void; aboutOnl
                     className="btn btn-danger"
                     onClick={() => {
                       clearAll();
-                      setCleared(true);
                       setConfirming(false);
                       onClose();
                     }}
@@ -81,9 +127,10 @@ export function Settings({ onClose, aboutOnly }: { onClose: () => void; aboutOnl
           </section>
         </>
       )}
-      <p className="links">
+      {about}
+      <p className="links small">
         <a href={CONSENT_URL} target="_blank" rel="noopener noreferrer">{t.links.consent}</a>
-        {' | '}
+        {' · '}
         <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">{t.links.privacy}</a>
       </p>
     </Sheet>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
+import { Icon } from './NavIcon';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -57,8 +58,8 @@ export function Sheet({ title, onClose, closeLabel, children }: { title: string;
       >
         <div className="sheet-head">
           <h2>{title}</h2>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>
-            {closeLabel}
+          <button type="button" className="icon-btn" onClick={onClose} aria-label={closeLabel}>
+            <Icon name="close" size={20} />
           </button>
         </div>
         {children}

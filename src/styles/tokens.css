@@ -22,46 +22,129 @@
   font-display: swap;
 }
 
-:root {
+:root,
+[data-theme='light'] {
   /* Brand colours (inferred from manmatters.com CSS frequency, not an official style guide) */
   --navy: #143461;
   --blue: #225396;
-  --surface: #f2f7fc;
+  --pale: #f2f7fc;
   --yellow: #fddc69;
-
-  /* Neutrals */
   --white: #ffffff;
-  --n-50: #f5f5f5;
-  --n-100: #e3e3e3;
-  --n-300: #c6c6c6;
-  --n-500: #9e9e9e;
-  --n-600: #666666;
-  --n-900: #212121;
-  --ink: #101828;
 
-  /* Semantic */
-  --color-bg: var(--surface);
-  --color-card: var(--white);
-  --color-text: var(--navy); /* navy on white/surface: contrast above 10:1 */
-  --color-muted: #4a4a4a; /* above 7:1 on white */
-  --color-primary: var(--navy);
-  --color-on-primary: var(--white);
-  --color-link: var(--blue); /* 7.9:1 on white */
-  --color-accent: var(--yellow);
-  --color-on-accent: var(--navy);
-  --color-danger-bg: #fdecec;
-  --color-danger-text: #7a1212; /* above 9:1 on danger bg */
-  --color-border: var(--n-100);
+  /* Semantic, light. Contrast notes are against --card (#fff) unless stated. */
+  --bg: var(--pale);
+  --card: var(--white);
+  --card-2: #f2f7fc; /* sub panels inside cards */
+  --text: var(--navy); /* 12.6:1 */
+  --heading: var(--navy);
+  --muted: #4b5b73; /* 7.0:1 */
+  --border: #dfe7f1;
+  --border-strong: #b9c7d8;
+  --primary: var(--navy);
+  --primary-hover: var(--blue);
+  --on-primary: var(--white);
+  --link: var(--blue); /* 7.9:1 */
+  --accent: var(--yellow);
+  --on-accent: var(--navy); /* 9.6:1 on yellow */
+  --accent-soft: #fff8da;
+  --chip-bg: #e8f0fa;
+  --chip-fg: var(--blue);
+  --focus: var(--blue);
+  --input-bg: var(--white);
+  --bar-bg: rgba(255, 255, 255, 0.985);
+  --hero-glow: 0.18;
+  --shadow: 0 1px 2px rgba(20, 52, 97, 0.06), 0 4px 16px rgba(20, 52, 97, 0.06);
+  --shadow-lift: 0 2px 4px rgba(20, 52, 97, 0.1), 0 10px 24px rgba(20, 52, 97, 0.12);
 
+  --ok-bg: #eaf6ee;
+  --ok-line: #2d7a46;
+  --info-bg: #eaf1fb;
+  --info-line: var(--blue);
+  --warn-bg: #fff8da;
+  --warn-line: #a87d00;
+  --alert-bg: #fff0e0;
+  --alert-line: #c25e00;
+  --danger-bg: #fdecec;
+  --danger-line: #b42318;
+  --danger-text: #7a1212; /* 9:1 on danger bg */
+  --on-danger: var(--white);
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  /* Derived from the brand navy. Body text checks against --card (#12274A). */
+  --bg: #0b1b33;
+  --card: #12274a;
+  --card-2: #183160;
+  --text: #e3ecf8; /* 12.4:1 */
+  --heading: #f2f7fc; /* 13.6:1 */
+  --muted: #b3c3da; /* 8.1:1 */
+  --border: #24406b;
+  --border-strong: #3b5a88;
+  --primary: #a9c8f2;
+  --primary-hover: #c3d9f7;
+  --on-primary: #0b1b33; /* 10.5:1 on primary */
+  --link: #9cc0f0; /* 7.3:1 */
+  --accent: var(--yellow);
+  --on-accent: #0b1b33; /* 13:1 on yellow */
+  --accent-soft: rgba(253, 220, 105, 0.12);
+  --chip-bg: #1d3a66;
+  --chip-fg: #bcd5f6;
+  --focus: var(--yellow);
+  --input-bg: #0e2140;
+  --bar-bg: rgba(11, 27, 51, 0.985);
+  --hero-glow: 0.08;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 10px 24px rgba(0, 0, 0, 0.35);
+
+  --ok-bg: #12352b;
+  --ok-line: #4cbf7a;
+  --info-bg: #15315c;
+  --info-line: #7fb0ee;
+  --warn-bg: #352e12;
+  --warn-line: #e3be4a;
+  --alert-bg: #3b2612;
+  --alert-line: #ef9a4a;
+  --danger-bg: #3d1616;
+  --danger-line: #f07167;
+  --danger-text: #ffd7d3; /* 11:1 on danger bg */
+  --on-danger: var(--white);
+
+  color-scheme: dark;
+}
+
+:root {
   --font-sans: 'MiSansLatin', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
+  /* Spacing scale 4/8/12/16/24/32 */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+
+  /* Type scale */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+  --fs-2xl: 1.75rem;
+  --fs-hero: 2.75rem;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
   --tap: 44px;
-  --radius: 14px;
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 16px;
-  --space-4: 24px;
-  --space-5: 32px;
+  --bar-h: 56px;
+  --nav-h: 64px;
+  --fab-h: 56px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 * {
@@ -74,8 +157,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.5;
@@ -92,7 +175,7 @@ summary {
 }
 
 :focus-visible {
-  outline: 3px solid var(--blue);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 

@@ -40,3 +40,22 @@ describe('shedCheck', () => {
     expect(shedCheck({ week, amount, irritation: 'mild' })).toBe(expected);
   });
 });
+
+import { shedNext, SHED_RECHECK_DAYS } from '../engine/shedCheck';
+
+describe('shedNext (Kab tak?)', () => {
+  const settle = { from: 5, to: 8 };
+  it('red flags are now, doctor results are consult this week', () => {
+    expect(shedNext('doctor-now', 3, settle)).toEqual({ kind: 'now' });
+    expect(shedNext('see-doctor-soon', 3, settle)).toEqual({ kind: 'consult' });
+    expect(shedNext('unusual-for-week', 20, settle)).toEqual({ kind: 'consult' });
+  });
+  it('early weeks give the settle window and a recheck', () => {
+    expect(shedNext('commonly-reported', 2, settle)).toEqual({ kind: 'settles', from: 5, to: 8, recheckDays: SHED_RECHECK_DAYS });
+    expect(shedNext('commonly-reported', 6, settle)).toEqual({ kind: 'settles', from: 6, to: 8, recheckDays: SHED_RECHECK_DAYS });
+    expect(shedNext('commonly-reported', 8, settle)).toMatchObject({ kind: 'settles', from: 8, to: 8 });
+  });
+  it('past the window it is watch and recheck', () => {
+    expect(shedNext('commonly-reported', 10, settle)).toEqual({ kind: 'watch', recheckDays: SHED_RECHECK_DAYS });
+  });
+});

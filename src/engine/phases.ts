@@ -84,3 +84,78 @@ export function daysSince(start: string | Date, today: string | Date = new Date(
 export function weekFromStartDate(start: string | Date, today: string | Date = new Date()): number {
   return Math.floor(daysSince(start, today) / 7) + 1;
 }
+
+export function phaseRange(id: PhaseId): { from: number; to: number | null } {
+  const p = PHASES.find((x) => x.id === id)!;
+  return { from: p.from, to: p.to };
+}
+
+/* ---------- Journey timeline ("Kab tak?") ---------- */
+
+export type JourneyId =
+  | 'start'
+  | 'shed-window'
+  | 'settling'
+  | 'early-signs'
+  | 'checkpoint-1'
+  | 'visible-change'
+  | 'checkpoint-2'
+  | 'maintenance';
+
+export interface JourneyStep {
+  id: JourneyId;
+  /** first week (inclusive). Week 0 means the start date itself. */
+  from: number;
+  /** last week (inclusive); null means open ended */
+  to: number | null;
+  /** the PHASES entry this step reuses, null for the start marker */
+  phase: PhaseId | null;
+  /** a checkpoint (a moment to self-check), not a window */
+  checkpoint: boolean;
+}
+
+/** Built from PHASES so there is one source of truth for week boundaries. */
+export const JOURNEY: readonly JourneyStep[] = [
+  { id: 'start', from: 0, to: 0, phase: null, checkpoint: false },
+  { id: 'shed-window', ...phaseRange('settling-in'), phase: 'settling-in', checkpoint: false },
+  { id: 'settling', ...phaseRange('shed-settling'), phase: 'shed-settling', checkpoint: false },
+  { id: 'early-signs', ...phaseRange('early-signs'), phase: 'early-signs', checkpoint: false },
+  { id: 'checkpoint-1', ...phaseRange('checkpoint-1'), phase: 'checkpoint-1', checkpoint: true },
+  { id: 'visible-change', ...phaseRange('building'), phase: 'building', checkpoint: false },
+  { id: 'checkpoint-2', ...phaseRange('checkpoint-2'), phase: 'checkpoint-2', checkpoint: true },
+  { id: 'maintenance', ...phaseRange('maintenance'), phase: 'maintenance', checkpoint: false },
+];
+
+/** Index in JOURNEY of the step the user is in now (never the start marker). */
+export function journeyIndex(weekNumber: number): number {
+  const phase = getPhase(weekNumber);
+  return JOURNEY.findIndex((s) => s.phase === phase);
+}
+
+/** The next step after the current one, with the week it begins. Null once in maintenance. */
+export function nextMilestone(weekNumber: number): { step: JourneyStep; week: number; weeksAway: number } | null {
+  const i = journeyIndex(weekNumber);
+  const next = JOURNEY[i + 1];
+  if (!next) return null;
+  const w = Math.max(1, Math.floor(weekNumber));
+  return { step: next, week: next.from, weeksAway: next.from - w };
+}
+
+/* ---------- Calendar helpers ---------- */
+
+function fromDayNumber(n: number): string {
+  const d = new Date(n * 86_400_000);
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${d.getUTCFullYear()}-${m}-${day}`;
+}
+
+/** YYYY-MM-DD plus a number of days, calendar based (DST safe). */
+export function addDaysISO(iso: string, days: number): string {
+  return fromDayNumber(toDayNumber(iso) + Math.round(days));
+}
+
+/** First calendar day of a journey week. Week 1 starts on the start date. */
+export function weekStartISO(startISO: string, weekNumber: number): string {
+  return addDaysISO(startISO, (Math.max(1, Math.floor(weekNumber)) - 1) * 7);
+}
